@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ubuntu-legacy-web-cloud-init
+  labels:
+    app.kubernetes.io/name: ubuntu-legacy-web
+stringData:
+  userdata: |
+    #cloud-config
+    hostname: ubuntu-legacy-web
+    manage_etc_hosts: true
+    users:
+      - default
+      - name: devops
+        groups: [adm, sudo]
+        shell: /bin/bash
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        lock_passwd: true
+        ssh_authorized_keys:
+          - REPLACE_WITH_YOUR_ED25519_PUBLIC_KEY
+    package_update: true
+    packages:
+      - nginx
+      - qemu-guest-agent
+      - curl
+    runcmd:
+      - systemctl enable --now qemu-guest-agent
+      - printf '<h1>FluxVirt KubeVirt VM</h1>\n' > /var/www/html/index.html
+      - systemctl enable --now nginx

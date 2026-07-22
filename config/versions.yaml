@@ -1,0 +1,45 @@
+ubuntu:
+  outer_vm_release: "24.04.4"
+  outer_vm_codename: noble
+  server_iso: "ubuntu-24.04.4-live-server-amd64.iso"
+  server_iso_sha256: "e907d92eeec9df64163a7e454cbc8d7755e8ddc7ed42f99dbc80c40f1a138433"
+  guest_image_release: "24.04"
+  guest_image_url: "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-amd64.img"
+
+host:
+  operating_system: "Windows 11 Home x86_64"
+  lab_boot_mode: "Microsoft hypervisor not launched; verify HypervisorPresent=False"
+
+hypervisor:
+  primary: "Oracle VirtualBox 7.2.14 Platform Package"
+  version: "7.2.14"
+  revision: "174565"
+  windows_installer: "VirtualBox-7.2.14-174565-Win.exe"
+  windows_installer_sha256: "5fb111f32a15763d519bf9ef23e0111153521f641cde7460e5b8e895ca27a1d2"
+  required_vm_setting: "nested-hw-virt=on"
+  extension_pack_required: false
+  degraded_fallback: "KubeVirt software emulation, explicitly labeled degraded"
+  advanced: "Linux KVM/libvirt or Proxmox VE on dedicated hardware"
+
+kubernetes:
+  distribution: k3s
+  k3s_version: "v1.35.6+k3s1"
+  kubernetes_version: "v1.35.6"
+  cni: flannel
+  storage_class: local-path
+
+platform:
+  flux_version: "v2.9.2"
+  kubevirt_version: "v1.8.4"
+  cdi_version: "v1.65.0"
+
+validation:
+  kubeconform_version: "v0.7.0"
+  yamllint_version: "1.35.1"
+  trivy_action_version: "v0.35.0@57a97c7e7821a5776cebc9bb87c984fa69cba8f1"
+  trivy_version: "v0.69.3"
+
+notes:
+  - "Re-verify all versions against official release and compatibility documentation before first deployment."
+  - "Do not move Kubernetes to 1.36 while KubeVirt 1.8 remains the selected branch."
+  - "Do not claim hardware acceleration until /dev/kvm and devices.kubevirt.io/kvm are validated."

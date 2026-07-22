@@ -1,0 +1,13 @@
+extends: default
+
+rules:
+  document-start: disable
+  line-length: disable
+  truthy:
+    allowed-values: ["true", "false", "on", "off"]
+
+ignore: |
+  infrastructure/kubevirt/operator/kubevirt-operator.yaml
+  infrastructure/kubevirt/cr/kubevirt-cr.yaml
+  infrastructure/cdi/operator/cdi-operator.yaml
+  infrastructure/cdi/cr/cdi-cr.yaml

@@ -1,0 +1,61 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: ubuntu-legacy-web
+  labels:
+    app.kubernetes.io/name: ubuntu-legacy-web
+    app.kubernetes.io/part-of: fluxvirt-lab
+spec:
+  runStrategy: Always
+  dataVolumeTemplates:
+    - metadata:
+        name: ubuntu-legacy-web-rootdisk
+      spec:
+        source:
+          http:
+            url: https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-amd64.img
+        storage:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 12Gi
+          storageClassName: local-path
+  template:
+    metadata:
+      labels:
+        kubevirt.io/domain: ubuntu-legacy-web
+        app.kubernetes.io/name: ubuntu-legacy-web
+    spec:
+      evictionStrategy: None
+      domain:
+        cpu:
+          cores: 2
+        resources:
+          requests:
+            memory: 2Gi
+          limits:
+            memory: 2Gi
+        devices:
+          autoattachGraphicsDevice: false
+          disks:
+            - name: rootdisk
+              disk:
+                bus: virtio
+            - name: cloudinitdisk
+              disk:
+                bus: virtio
+          interfaces:
+            - name: default
+              masquerade: {}
+      networks:
+        - name: default
+          pod: {}
+      volumes:
+        - name: rootdisk
+          dataVolume:
+            name: ubuntu-legacy-web-rootdisk
+        - name: cloudinitdisk
+          cloudInitNoCloud:
+            userDataSecretRef:
+              name: ubuntu-legacy-web-cloud-init

@@ -1,0 +1,49 @@
+name: validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  static-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Install validation tools
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python3 -m pip install --user yamllint==1.35.1
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+          KUBECTL_VERSION=v1.35.6
+          curl --proto '=https' --tlsv1.2 -fsSLO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl"
+          curl --proto '=https' --tlsv1.2 -fsSLO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl.sha256"
+          echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+          sudo install -m 0755 kubectl /usr/local/bin/kubectl
+          KUBECONFORM_VERSION=v0.7.0
+          curl -fsSL "https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION}/kubeconform-linux-amd64.tar.gz" -o /tmp/kubeconform.tar.gz
+          tar -xzf /tmp/kubeconform.tar.gz -C /tmp kubeconform
+          sudo install -m 0755 /tmp/kubeconform /usr/local/bin/kubeconform
+
+      - name: Fetch pinned KubeVirt and CDI manifests
+        run: ./scripts/vendor/vendor-platform-manifests.sh
+
+      - name: Run repository validation
+        run: ./scripts/validation/validate-repository.sh
+
+      - name: Trivy filesystem scan
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0 known-safe immutable release
+        with:
+          version: v0.69.3
+          scan-type: fs
+          scan-ref: .
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: '1'

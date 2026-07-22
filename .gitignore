@@ -1,0 +1,33 @@
+# Credentials and generated local state
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.pfx
+*.kubeconfig
+kubeconfig
+age.agekey
+.sops.yaml.local
+
+# Tool state
+.terraform/
+*.tfstate
+*.tfstate.*
+.vagrant/
+.packer_cache/
+
+# OS and editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Downloaded ISO/VHD artifacts
+*.iso
+*.vhd
+*.vhdx
+*.qcow2
+*.img
+
+.phase5-fix-backup-*

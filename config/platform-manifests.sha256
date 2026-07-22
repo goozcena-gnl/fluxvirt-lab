@@ -1,0 +1,4 @@
+d1d8264eec5b802c122bec6c54d8c3b11e119ee2a5c75602aaa8b53ea3857eda  infrastructure/kubevirt/operator/kubevirt-operator.yaml
+43106136dbce3312bdbfdeae612aacafc6c12da518d233f90645b4685d84a2af  infrastructure/kubevirt/cr/kubevirt-cr.yaml
+e96d59abdf358c5161cb96adcfdcc6107efc3fb608ec93ade11578c94a222015  infrastructure/cdi/operator/cdi-operator.yaml
+32df9a5a118efd486c918a139795a2200a3759e1cc55b0537986797120e75f32  infrastructure/cdi/cr/cdi-cr.yaml

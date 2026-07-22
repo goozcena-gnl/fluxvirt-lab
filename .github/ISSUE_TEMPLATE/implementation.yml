@@ -1,0 +1,21 @@
+name: Implementation task
+description: Track one testable FluxVirt Lab change
+title: "[TASK] "
+labels: [implementation]
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Validation evidence

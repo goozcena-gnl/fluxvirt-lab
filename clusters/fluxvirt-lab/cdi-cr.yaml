@@ -1,0 +1,22 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cdi-cr
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: cdi-operator
+  interval: 10m
+  retryInterval: 1m
+  timeout: 15m
+  path: ./infrastructure/cdi/cr
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: true
+  healthChecks:
+    - apiVersion: cdi.kubevirt.io/v1beta1
+      kind: CDI
+      name: cdi
+      namespace: cdi

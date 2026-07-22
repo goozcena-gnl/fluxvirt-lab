@@ -1,0 +1,8 @@
+# VirtualBox NAT uses DHCP by default. The installer normally creates an
+# equivalent netplan definition automatically. Keep the actual interface name
+# discovered with `ip link`; do not assume it is always `enp0s3`.
+network:
+  version: 2
+  ethernets:
+    enp0s3:
+      dhcp4: true
