@@ -7,7 +7,15 @@ rules:
     allowed-values: ["true", "false", "on", "off"]
 
 ignore: |
+  # Upstream KubeVirt release manifests.
   infrastructure/kubevirt/operator/kubevirt-operator.yaml
   infrastructure/kubevirt/cr/kubevirt-cr.yaml
+
+  # Upstream CDI release manifests.
   infrastructure/cdi/operator/cdi-operator.yaml
   infrastructure/cdi/cr/cdi-cr.yaml
+
+  # Files generated and maintained by Flux bootstrap.
+  clusters/fluxvirt-lab/flux-system/gotk-components.yaml
+  clusters/fluxvirt-lab/flux-system/gotk-sync.yaml
+  clusters/fluxvirt-lab/flux-system/kustomization.yaml
