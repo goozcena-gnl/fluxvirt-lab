@@ -58,5 +58,5 @@ spec:
             name: ubuntu-legacy-web-rootdisk
         - name: cloudinitdisk
           cloudInitNoCloud:
-            userDataSecretRef:
+            secretRef:
               name: ubuntu-legacy-web-cloud-init

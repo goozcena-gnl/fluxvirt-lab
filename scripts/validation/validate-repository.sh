@@ -48,6 +48,16 @@ for path in \
   fi
 done
 
+# Validate the VM workload against the live KubeVirt API when its CRD exists.
+# This catches unknown or removed custom-resource fields that a local
+# Kustomize render cannot detect.
+if command -v kubectl >/dev/null 2>&1 &&
+   kubectl get crd virtualmachines.kubevirt.io >/dev/null 2>&1; then
+  run kubectl apply     --dry-run=server     -k virtual-machines/ubuntu-legacy-web
+else
+  echo '[WARN] KubeVirt VirtualMachine CRD unavailable; skipped server-side VM validation.'
+fi
+
 if command -v kubeconform >/dev/null 2>&1 && command -v kubectl >/dev/null 2>&1; then
   kubectl kustomize apps/container-demo | run kubeconform -strict -summary
   kubectl kustomize virtual-machines/ubuntu-legacy-web | run kubeconform -ignore-missing-schemas -summary
