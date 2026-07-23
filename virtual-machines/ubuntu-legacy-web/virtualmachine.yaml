@@ -60,3 +60,8 @@ spec:
           cloudInitNoCloud:
             secretRef:
               name: ubuntu-legacy-web-cloud-init
+            networkData: |
+              version: 2
+              ethernets:
+                enp1s0:
+                  dhcp4: true
