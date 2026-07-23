@@ -8,3 +8,4 @@ resources:
   - cdi-operator.yaml
   - cdi-cr.yaml
   - cdi-storage-profile.yaml
+  - ubuntu-legacy-web.yaml

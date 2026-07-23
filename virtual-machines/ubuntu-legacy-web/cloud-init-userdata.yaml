@@ -17,7 +17,7 @@ stringData:
         sudo: ALL=(ALL) NOPASSWD:ALL
         lock_passwd: true
         ssh_authorized_keys:
-          - REPLACE_WITH_YOUR_ED25519_PUBLIC_KEY
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDy5rdJ6diaG7i1ISKG2St1a1EvsdUXnIiNnecfmPqVq fluxvirt-vm-access
     package_update: true
     packages:
       - nginx
