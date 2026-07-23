@@ -9,3 +9,4 @@ resources:
   - cdi-cr.yaml
   - cdi-storage-profile.yaml
   - ubuntu-legacy-web.yaml
+  - container-demo.yaml
