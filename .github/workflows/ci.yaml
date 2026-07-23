@@ -1,0 +1,200 @@
+name: Repository CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: repository-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GITLEAKS_VERSION: 8.30.1
+
+jobs:
+  validate:
+    name: Static validation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install system dependencies
+        run: |
+          set -Eeuo pipefail
+
+          sudo apt-get update
+          sudo apt-get install -y \
+            curl \
+            shellcheck \
+            tar \
+            yamllint
+
+      - name: Load pinned project versions
+        run: |
+          set -Eeuo pipefail
+
+          while IFS='=' read -r name value; do
+            case "$name" in
+              KUBERNETES_VERSION|KUBECONFORM_VERSION)
+                printf '%s=%s\n' "$name" "$value" >> "$GITHUB_ENV"
+                ;;
+            esac
+          done < versions.env
+
+      - name: Install pinned kubectl
+        run: |
+          set -Eeuo pipefail
+
+          kubectl_url="https://dl.k8s.io/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
+
+          curl \
+            --fail \
+            --location \
+            --silent \
+            --show-error \
+            --output kubectl \
+            "$kubectl_url"
+
+          curl \
+            --fail \
+            --location \
+            --silent \
+            --show-error \
+            --output kubectl.sha256 \
+            "${kubectl_url}.sha256"
+
+          printf '%s  %s\n' \
+            "$(cat kubectl.sha256)" \
+            kubectl |
+            sha256sum --check -
+
+          sudo install \
+            --owner=root \
+            --group=root \
+            --mode=0755 \
+            kubectl \
+            /usr/local/bin/kubectl
+
+          kubectl version --client
+
+      - name: Install pinned kubeconform
+        run: |
+          set -Eeuo pipefail
+
+          version="${KUBECONFORM_VERSION#v}"
+          archive="kubeconform-linux-amd64.tar.gz"
+          release_url="https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION}"
+
+          curl \
+            --fail \
+            --location \
+            --silent \
+            --show-error \
+            --output "$archive" \
+            "${release_url}/${archive}"
+
+          curl \
+            --fail \
+            --location \
+            --silent \
+            --show-error \
+            --output CHECKSUMS \
+            "${release_url}/CHECKSUMS"
+
+          grep " ${archive}$" CHECKSUMS |
+            sha256sum --check -
+
+          tar -xzf "$archive" kubeconform
+
+          sudo install \
+            --owner=root \
+            --group=root \
+            --mode=0755 \
+            kubeconform \
+            /usr/local/bin/kubeconform
+
+          kubeconform -v
+          printf 'Installed kubeconform %s\n' "$version"
+
+      - name: Validate repository
+        run: |
+          set -Eeuo pipefail
+
+          ./scripts/validation/validate-repository.sh
+
+      - name: Verify independent Flux ownership
+        run: |
+          set -Eeuo pipefail
+
+          if grep -RInE \
+            'path:[[:space:]]+\./workloads|name:[[:space:]]+workloads|-[[:space:]]+workloads\.yaml|-[[:space:]]+\.\./workloads' \
+            clusters \
+            --exclude-dir=flux-system; then
+            echo '[FAIL] Obsolete aggregate ownership remains.'
+            exit 1
+          fi
+
+          test ! -e clusters/fluxvirt-lab/workloads.yaml
+          test ! -e workloads
+
+          echo '[PASS] Workloads have independent Flux ownership.'
+
+      - name: Install pinned Gitleaks
+        run: |
+          set -Eeuo pipefail
+
+          archive="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          release_url="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}"
+
+          curl \
+            --fail \
+            --location \
+            --silent \
+            --show-error \
+            --output "$archive" \
+            "${release_url}/${archive}"
+
+          curl \
+            --fail \
+            --location \
+            --silent \
+            --show-error \
+            --output gitleaks-checksums.txt \
+            "${release_url}/gitleaks_${GITLEAKS_VERSION}_checksums.txt"
+
+          grep " ${archive}$" gitleaks-checksums.txt |
+            sha256sum --check -
+
+          tar -xzf "$archive" gitleaks
+
+          sudo install \
+            --owner=root \
+            --group=root \
+            --mode=0755 \
+            gitleaks \
+            /usr/local/bin/gitleaks
+
+          gitleaks version
+
+      - name: Scan Git history for secrets
+        run: |
+          set -Eeuo pipefail
+
+          gitleaks git \
+            --redact \
+            --verbose \
+            .
