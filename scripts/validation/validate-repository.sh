@@ -30,6 +30,7 @@ for path in \
   infrastructure/kubevirt/cr \
   infrastructure/cdi/operator \
   infrastructure/cdi/cr \
+  infrastructure/cdi/storage-profile \
   virtual-machines/ubuntu-legacy-web \
   apps/container-demo \
   workloads; do

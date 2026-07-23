@@ -7,3 +7,4 @@ resources:
   - kubevirt-cr.yaml
   - cdi-operator.yaml
   - cdi-cr.yaml
+  - cdi-storage-profile.yaml
