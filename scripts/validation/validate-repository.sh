@@ -32,8 +32,7 @@ for path in \
   infrastructure/cdi/cr \
   infrastructure/cdi/storage-profile \
   virtual-machines/ubuntu-legacy-web \
-  apps/container-demo \
-  workloads; do
+  apps/container-demo; do
   if command -v kubectl >/dev/null 2>&1; then
     if output=$(kubectl kustomize "$path" 2>&1); then
       echo "+ kubectl kustomize $path"
