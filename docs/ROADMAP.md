@@ -1,61 +1,67 @@
 # Roadmap
 
-## v0.1.0-windows-home-preflight
+## v0.1.0 — validated single-node MVP
 
-- BIOS/UEFI evidence
-- Windows Home preflight output
-- dedicated lab boot entry documented
-- Hypervisor ADR
+Status: release candidate.
 
-## v0.2.0-virtualbox-ubuntu-lab
+Completed:
 
-- Reproducible VirtualBox VM definition
-- Ubuntu Server 24.04.4 installation
-- VirtualBox NAT forwarding
-- `/dev/kvm` proof
+- Windows 11 Home host-mode preflight;
+- dedicated non-Microsoft-hypervisor lab boot;
+- VirtualBox and Ubuntu provisioning;
+- nested KVM validation;
+- single-node K3s;
+- Flux CD bootstrap;
+- KubeVirt and CDI;
+- persistent Ubuntu virtual machine;
+- hardened container workload;
+- static and runtime acceptance;
+- Gitleaks and Trivy scanning;
+- protected repository governance;
+- Dependabot version and security updates;
+- recruiter-facing documentation.
 
-## v0.3.0-kubernetes
+## v0.2.0 — reproducibility and resilience
 
-- K3s 1.35.6
-- Node Ready
-- local-path storage validation
+Planned:
 
-## v0.4.0-flux-bootstrap
+- clean-room rebuild from a fresh outer Ubuntu VM;
+- automated rebuild timing and evidence;
+- VM disk backup and restore exercise;
+- tested disaster-recovery runbook;
+- SOPS with age for encrypted GitOps secrets;
+- NetworkPolicies for workload isolation;
+- improved release automation.
 
-- Flux 2.9.2
-- GitHub bootstrap
-- dependency-ordered reconciliations
+## v0.3.0 — policy and observability
 
-## v0.5.0-kubevirt-mvp
+Planned:
 
-- KubeVirt 1.8.4
-- CDI 1.65.0
-- one Ubuntu VM and one container workload
-- validation evidence
+- Kyverno in Audit mode and then Enforce;
+- Prometheus and Grafana;
+- KubeVirt and node health dashboards;
+- alerting for reconciliation and VM failures;
+- capacity and saturation reporting;
+- SBOM generation and image-signature validation.
 
-## v1.0.0-portfolio-release
+## v0.4.0 — platform usability
 
-- CI checks
-- diagrams and screenshots
-- troubleshooting guide
-- clean rebuild exercise
-- recruiter demo script
+Planned:
 
-## Intermediate
+- reusable virtual-machine templates;
+- self-service workload examples;
+- Ansible guest configuration;
+- optional host-only networking;
+- documented upgrade and rollback exercises.
 
-- SOPS with age
-- Kyverno
-- Trivy and secret scanning
-- Prometheus/Grafana
-- backup/restore exercise
-- Ansible configuration of the KubeVirt guest
-- optional VirtualBox host-only adapter
+## v1.0.0 — expanded platform
 
-## Advanced
+Potential scope:
 
-- multiple outer Ubuntu nodes on dedicated hardware
-- KubeVirt migration-capable storage
-- network policies and MetalLB
-- Loki/Tempo/OpenTelemetry
-- self-service VM templates
-- migration to Proxmox VE or Linux KVM/libvirt
+- multiple physical or virtual Kubernetes nodes;
+- migration-capable storage;
+- KubeVirt live migration;
+- high-availability control plane;
+- load balancer and ingress design;
+- Loki, Tempo and OpenTelemetry;
+- migration to Proxmox VE or native Linux KVM/libvirt.

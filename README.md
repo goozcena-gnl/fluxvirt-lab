@@ -1,99 +1,206 @@
 # FluxVirt Lab
 
-> **Status:** **Phase 0 host validation passed on 2026-07-22** on Windows 11 Home Insider Preview. Native VT-x, SLAT, and firmware virtualization are verified; `HypervisorPresent=False`; VBS/HVCI is inactive in the lab boot. VirtualBox, Ubuntu, `/dev/kvm`, Kubernetes, Flux, KubeVirt, CDI, and workloads are not yet runtime-validated.
+[![Repository CI](https://github.com/goozcena-gnl/fluxvirt-lab/actions/workflows/ci.yaml/badge.svg)](https://github.com/goozcena-gnl/fluxvirt-lab/actions/workflows/ci.yaml)
+[![Validation and Trivy](https://github.com/goozcena-gnl/fluxvirt-lab/actions/workflows/validate.yml/badge.svg)](https://github.com/goozcena-gnl/fluxvirt-lab/actions/workflows/validate.yml)
 
-FluxVirt Lab is a Windows-hosted, Ubuntu-based cloud-native virtualization laboratory. Oracle VirtualBox runs one Ubuntu Server LTS virtual machine, Ubuntu runs a single-node K3s cluster, and Flux CD reconciles both containerized workloads and KubeVirt virtual machines from Git.
+> **Status:** `v0.1.0` release candidate. The complete Windows 11 Home →
+> VirtualBox → Ubuntu → nested KVM → K3s → Flux CD → KubeVirt/CDI path
+> has been validated with one running virtual machine and one container
+> workload.
 
-## Baseline architecture
+FluxVirt Lab is a reproducible cloud-native virtualization laboratory
+built on a Windows 11 Home workstation.
+
+Oracle VirtualBox runs an Ubuntu Server virtual machine with nested
+hardware virtualization. Ubuntu hosts a single-node K3s cluster where
+Flux CD reconciles KubeVirt, CDI, an Ubuntu virtual machine and a
+hardened container workload from Git.
+
+## What this project demonstrates
+
+- validating native VT-x, SLAT and nested KVM on Windows 11 Home;
+- provisioning a repeatable VirtualBox and Ubuntu environment;
+- operating Kubernetes virtual machines and containers together;
+- dependency-ordered GitOps reconciliation with Flux CD;
+- persistent VM storage through CDI DataVolumes and PVCs;
+- cloud-init guest configuration and QEMU Guest Agent integration;
+- repository validation with ShellCheck, yamllint and Kubeconform;
+- Gitleaks and Trivy security scanning;
+- protected-branch governance and pull-request-only changes;
+- evidence-based runtime acceptance rather than configuration-only claims.
+
+## Validated architecture
 
 ```text
 Windows 11 Home x86_64
-└── Oracle VirtualBox 7.2.14 Platform Package
+└── Oracle VirtualBox 7.2.14
     └── Ubuntu Server 24.04.4 LTS
-        └── K3s / Kubernetes 1.35
-            ├── Flux CD 2.9.2
-            ├── KubeVirt 1.8.4
-            ├── CDI 1.65.0
-            ├── Ubuntu KubeVirt guest
-            └── Container demo workload
+        ├── nested KVM: /dev/kvm
+        └── K3s v1.35.6+k3s1
+            ├── Flux CD v2.9.2
+            ├── KubeVirt v1.8.4
+            ├── CDI v1.65.0
+            ├── Ubuntu 24.04 KubeVirt VM
+            └── hardened container demo
 ```
 
-## Why VirtualBox
+See [Architecture](docs/ARCHITECTURE.md) for the component and
+reconciliation diagrams.
 
-Windows 11 Home does not include the full Hyper-V role. The primary path is therefore the **Oracle VirtualBox 7.2.14 Platform Package**, whose base components are GPLv3 and whose CLI exposes nested VT-x/AMD-V through `--nested-hw-virt on`.
+## Validated MVP
 
-The design has an important host-mode constraint: WSL2, Virtual Machine Platform, Windows Hypervisor Platform, Memory Integrity, or another VBS feature can cause the Microsoft hypervisor to be active even on Windows Home. VirtualBox may still start through a compatibility backend, but nested KVM for KubeVirt must not be assumed to work in that mode.
+| Capability | Validated result |
+|---|---|
+| Windows host mode | Microsoft hypervisor disabled in the dedicated lab boot |
+| VirtualBox | Nested hardware virtualization enabled |
+| Ubuntu | `/dev/kvm` available and usable |
+| Kubernetes | Single K3s node `Ready` |
+| Flux CD | All declared Kustomizations `Ready` |
+| KubeVirt | Available with allocatable KVM devices |
+| CDI | DataVolume import succeeded and PVC bound |
+| Virtual machine | Ubuntu guest `Running` and `Ready` |
+| Guest integration | QEMU Guest Agent connected |
+| VM service | Nginx page reachable through NodePort |
+| Container | Hardened HTTP workload `Ready` and reachable |
+| Static CI | Shell, YAML, manifests and ownership validated |
+| Security CI | Gitleaks history scan and Trivy filesystem scan |
+| Governance | Protected `main`, required PRs and required CI checks |
 
-The recommended approach is a separate Windows boot entry with `hypervisorlaunchtype off` and `vsmlaunchtype off` for FluxVirt Lab. However, Memory Integrity and the Windows optional-feature states are global settings: after this workstation required those global changes, WSL2/VBS must be explicitly restored when returning to the normal operating profile. Read `docs/WINDOWS-HOME.md` before changing boot configuration.
+## Quick verification
 
-## Pinned compatibility baseline
+Run inside the Ubuntu lab VM:
 
-| Component | Baseline |
-|---|---:|
-| Host | Windows 11 Home x86_64 |
-| Hypervisor | Oracle VirtualBox 7.2.14 Platform Package |
-| Ubuntu Server | 24.04.4 LTS |
-| K3s | v1.35.6+k3s1 |
-| Kubernetes | v1.35.6 |
-| Flux | v2.9.2 |
-| KubeVirt | v1.8.4 |
-| CDI | v1.65.0 |
+```bash
+./scripts/validation/validate-repository.sh
+RESTART_STABILITY_SECONDS=15 \
+  ./scripts/validation/check-workloads.sh
+```
 
-See `config/versions.yaml` and the ADRs before upgrading.
+Inspect reconciliation:
 
-## MVP boundaries
+```bash
+flux get kustomizations -A
+```
 
-The MVP intentionally excludes multi-node Kubernetes, live migration, Longhorn/Rook-Ceph, Backstage, Loki, Tempo, OpenTelemetry, MetalLB, and high availability. The first target is one hardware-accelerated KubeVirt VM and one containerized application on one Ubuntu/K3s node.
+Inspect both workload types:
 
-Software emulation is documented only as a degraded learning fallback. It does not satisfy the hardware-accelerated MVP acceptance criteria.
+```bash
+kubectl get vm,vmi,dv,pvc -n vm-workloads
+kubectl get deployment,pod,service -n demo
+```
 
-## Start here
+## Access the workloads
 
-1. Read `docs/WINDOWS-HOME.md` and ensure that any device-encryption recovery information is available before changing Windows boot configuration.
-2. Run the Windows host preflight in an elevated PowerShell terminal:
+Resolve the current Kubernetes node IP:
 
-   ```powershell
-   Set-ExecutionPolicy -Scope Process Bypass
-   .\scripts\preflight\check-host-virtualization.ps1
-   $LASTEXITCODE
-   ```
+```bash
+node_ip=$(
+  kubectl get node fluxvirt-lab \
+    -o jsonpath='{.status.addresses[?(@.type=="InternalIP")].address}'
+)
 
-   On the normal WSL2/VBS-enabled boot, exit code `2` is expected. When `HypervisorPresent=True`, the three CPU virtualization fields can be masked and must not be treated as BIOS failures. Create the separate lab boot entry in `docs/WINDOWS-HOME.md`, boot it, and rerun the script.
+echo "$node_ip"
+```
 
-3. Install the pinned VirtualBox 7.2.14 **Platform Package only after the lab-boot preflight returns `0`**. The Extension Pack is not required.
-4. Create the Ubuntu VM:
+Open the VM-hosted Nginx page:
 
-   ```powershell
-   .\infrastructure\hypervisor\virtualbox\Create-FluxVirtLabVM.ps1 `
-     -IsoPath 'C:\ISO\ubuntu-24.04.4-live-server-amd64.iso'
-   ```
+```bash
+curl "http://${node_ip}:30080/"
+```
 
-5. Install Ubuntu Server 24.04.4 LTS with OpenSSH enabled.
-6. Run `scripts/preflight/check-ubuntu-kvm.sh` inside Ubuntu.
-7. Do **not** install K3s until `/dev/kvm` exists and is accessible.
-8. Before Flux bootstrap, run `make vendor`; CDI release assets are intentionally fetched and committed during this step.
+Open the container workload:
+
+```bash
+curl "http://${node_ip}:30081/"
+```
+
+Connect to the KubeVirt guest:
+
+```bash
+ssh \
+  -i ~/.ssh/fluxvirt_vm_ed25519 \
+  -p 30022 \
+  devops@"${node_ip}"
+```
+
+The private SSH key is generated outside the repository and must never
+be committed.
+
+## Reproduce the lab
+
+1. Read [Windows Home setup](docs/WINDOWS-HOME.md).
+2. Validate the dedicated Windows lab boot.
+3. Create the outer Ubuntu VM with the VirtualBox provisioning script.
+4. Validate nested KVM inside Ubuntu.
+5. Install K3s and Flux CD.
+6. Bootstrap the repository.
+7. Allow Flux to reconcile KubeVirt, CDI and both workloads.
+8. Run the static and runtime acceptance scripts.
+
+Detailed instructions are available in
+[Installation](docs/INSTALLATION.md) and
+[GitOps](docs/GITOPS.md).
 
 ## Repository map
 
-- `infrastructure/hypervisor/virtualbox/`: Windows 11 Home VirtualBox provisioning.
-- `infrastructure/ubuntu/`: Ubuntu baseline and VirtualBox NAT networking examples.
-- `infrastructure/kubernetes/`: K3s installation.
-- `infrastructure/kubevirt/`, `infrastructure/cdi/`: vendored platform manifests.
-- `clusters/fluxvirt-lab/`: Flux reconciliation graph.
-- `virtual-machines/`: KubeVirt VM and DataVolume definitions.
-- `apps/`: containerized demonstration workload.
-- `policies/`: optional Kyverno policies.
-- `scripts/`: preflight, bootstrap, vendor, validation, and teardown helpers.
-- `docs/`: project plan, Windows Home guidance, architecture, networking, GitOps, KubeVirt, security, observability, backup, troubleshooting, ADRs, roadmap, and portfolio copy.
+- `clusters/fluxvirt-lab/`: Flux reconciliation graph;
+- `infrastructure/`: VirtualBox, Ubuntu, Kubernetes, KubeVirt and CDI;
+- `virtual-machines/`: KubeVirt VM and DataVolume definitions;
+- `apps/`: hardened container workload;
+- `scripts/`: bootstrap, preflight, validation and teardown helpers;
+- `docs/`: architecture, operations, security and portfolio material;
+- `.github/workflows/`: required static and security CI gates.
 
-## Safety rules
+## Security and governance
 
-- Never commit PATs, private SSH keys, kubeconfigs, SOPS private age keys, passwords, or VM credentials.
-- Replace every `REPLACE_ME` placeholder before deployment.
-- Review scripts before running them as Administrator or with `sudo`.
-- Do not silently disable Memory Integrity, VBS, WSL2, or Windows virtualization features.
-- Git is the source of desired Kubernetes state; persistent VM disks still require separate backup.
+The repository enforces:
 
-## License
+- read-only GitHub Actions permissions;
+- immutable action references;
+- Gitleaks history scanning;
+- pinned Trivy filesystem scanning;
+- GitHub secret scanning and push protection;
+- Dependabot version and security updates;
+- pull-request-only changes to `main`;
+- required CI checks and resolved review conversations;
+- squash merging and linear history;
+- blocked force pushes and branch deletion.
 
-Apache-2.0 for original repository content. Vendored upstream manifests retain their upstream licenses.
+See [Security](docs/SECURITY.md) and
+[Governance](docs/GOVERNANCE.md).
+
+## Intentional boundaries
+
+The v0.1.0 MVP is a single-node learning and portfolio environment.
+
+It does not claim:
+
+- production availability;
+- high availability;
+- live migration;
+- distributed storage;
+- multi-node failure tolerance;
+- production-grade ingress or load balancing.
+
+Persistent VM disks remain node-bound and require a separate backup
+strategy.
+
+## Documentation
+
+- [Architecture](docs/ARCHITECTURE.md)
+- [Installation](docs/INSTALLATION.md)
+- [Recruiter demonstration](docs/DEMO.md)
+- [Portfolio positioning](docs/PORTFOLIO.md)
+- [Security](docs/SECURITY.md)
+- [Governance](docs/GOVERNANCE.md)
+- [Troubleshooting](docs/TROUBLESHOOTING.md)
+- [Backup and restore](docs/BACKUP-RESTORE.md)
+- [Roadmap](docs/ROADMAP.md)
+- [Release checklist](docs/RELEASE-CHECKLIST.md)
+- [Changelog](CHANGELOG.md)
+- [License](LICENSE)
+
+Original repository content is licensed under
+[Apache License 2.0](LICENSE).
+
+Vendored upstream manifests retain their upstream licenses.

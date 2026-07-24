@@ -63,6 +63,28 @@ flowchart LR
   SVC[NodePort Service] --> VM
 ```
 
+## Validated implementation state
+
+| Layer | Runtime evidence |
+|---|---|
+| Windows | dedicated lab boot with Microsoft hypervisor inactive |
+| VirtualBox | nested hardware virtualization enabled |
+| Ubuntu | `/dev/kvm` available and KVM acceleration verified |
+| K3s | node Ready |
+| Flux | all declared Kustomizations Ready |
+| KubeVirt | Available with allocatable KVM devices |
+| CDI | DataVolume Succeeded and PVC Bound |
+| VM | VirtualMachine and VMI Running and Ready |
+| Guest | QEMU Guest Agent connected and Nginx reachable |
+| Container | Deployment available and HTTP endpoint reachable |
+| CI | both required validation and security checks successful |
+| Governance | pull-request-only protected default branch |
+
+The runtime acceptance script intentionally distinguishes historical
+container restarts from active instability. A non-zero lifetime restart
+count is accepted only when it remains stable during the observation
+window and the workload remains Ready and reachable.
+
 ## Design principles
 
 - One outer Ubuntu VM and one Kubernetes node for the MVP.
