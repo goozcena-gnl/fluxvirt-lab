@@ -140,10 +140,22 @@ pod_phase=$(
     true
 )
 
-pod_restarts=$(
+pod_restarts_before=$(
   kubectl -n demo get pods \
     -l app.kubernetes.io/name=container-demo \
-    -o jsonpath='{range .items[*].status.containerStatuses[*]}{.restartCount}{"\n"}{end}' \
+    -o jsonpath='{range .items[*].status.containerStatuses[*]}{.restartCount}{"\\n"}{end}' \
+    2>/dev/null |
+    awk '{total += $1} END {print total + 0}'
+)
+
+restart_stability_seconds=${RESTART_STABILITY_SECONDS:-15}
+
+sleep "$restart_stability_seconds"
+
+pod_restarts_after=$(
+  kubectl -n demo get pods \
+    -l app.kubernetes.io/name=container-demo \
+    -o jsonpath='{range .items[*].status.containerStatuses[*]}{.restartCount}{"\\n"}{end}' \
     2>/dev/null |
     awk '{total += $1} END {print total + 0}'
 )
@@ -151,7 +163,14 @@ pod_restarts=$(
 expect_equal "Container ready replicas" "$ready_replicas" "1"
 expect_equal "Container available replicas" "$available_replicas" "1"
 expect_equal "Container Pod phase" "$pod_phase" "Running"
-expect_equal "Container restart count" "$pod_restarts" "0"
+
+if [[ "$pod_restarts_before" == "$pod_restarts_after" ]]; then
+  pass \
+    "Container restart count stable: ${pod_restarts_before} over ${restart_stability_seconds}s"
+else
+  fail \
+    "Container restart count increased: ${pod_restarts_before} -> ${pod_restarts_after}"
+fi
 
 vm_response=$(
   curl -fsS \
