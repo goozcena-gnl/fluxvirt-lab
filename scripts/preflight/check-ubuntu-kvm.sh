@@ -22,9 +22,9 @@ else
   fail '/dev/kvm does not exist. Do not install KubeVirt yet.'
 fi
 
-if lsmod | grep -qE '^kvm(_intel|_amd)?\b'; then
+if grep -qE '^kvm(_intel|_amd)?[[:space:]]' /proc/modules; then
   pass 'KVM kernel module is loaded.'
-  lsmod | grep -E '^kvm' || true
+  lsmod | grep -E '^kvm(_intel|_amd)?[[:space:]]' || true
 else
   fail 'KVM kernel modules are not loaded.'
 fi
