@@ -14,11 +14,32 @@ Use descriptive branch names:
 
 ## Required local validation
 
+Install ShellCheck, yamllint, kubectl and Kubeconform before running
+local validation. The validation script skips unavailable tools, so a
+successful exit code is valid evidence only when the output confirms
+that all required checks actually ran.
+
+Verify the prerequisites:
+
+```bash
+for tool in shellcheck yamllint kubectl kubeconform; do
+  command -v "$tool" >/dev/null 2>&1 || {
+    echo "[FAIL] Required validation tool is unavailable: $tool"
+    exit 1
+  }
+done
+```
+
 Run:
 
 ```bash
 ./scripts/validation/validate-repository.sh
 ```
+
+
+Server-side KubeVirt validation also requires cluster access and the
+`virtualmachines.kubevirt.io` CRD. Review the command output for skipped
+checks before reporting local validation as successful.
 
 When the change affects the running platform or workloads, also run:
 

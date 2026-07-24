@@ -43,6 +43,18 @@ RESTART_STABILITY_SECONDS=15 \
   ./scripts/validation/check-workloads.sh
 ```
 
+## Reproducibility and recovery
+
+- [ ] clean-room rebuild starts from a fresh outer Ubuntu VM
+- [ ] rebuild duration and environment details are recorded
+- [ ] clean-room static acceptance passes
+- [ ] clean-room runtime acceptance passes
+- [ ] VM disk or PVC backup is created
+- [ ] backup checksum and metadata are recorded
+- [ ] VM disk or PVC restore is completed
+- [ ] restored VM passes end-to-end acceptance
+- [ ] tested procedure is documented in `docs/BACKUP-RESTORE.md`
+
 ## Governance
 
 - [ ] release change is submitted through a pull request
@@ -53,7 +65,7 @@ RESTART_STABILITY_SECONDS=15 \
 
 ## Release publication
 
-- [ ] merge commit is present on `main`
+- [ ] squash commit for the release pull request is present on `main`
 - [ ] annotated `v0.1.0` tag created from `main`
 - [ ] tag pushed
 - [ ] GitHub Release created
