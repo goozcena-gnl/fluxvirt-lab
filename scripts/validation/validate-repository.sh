@@ -52,7 +52,11 @@ done
 # Kustomize render cannot detect.
 if command -v kubectl >/dev/null 2>&1 &&
    kubectl get crd virtualmachines.kubevirt.io >/dev/null 2>&1; then
-  run kubectl apply     --dry-run=server     -k virtual-machines/ubuntu-legacy-web
+  run kubectl apply \
+    --server-side \
+    --dry-run=server \
+    --field-manager=fluxvirt-validation \
+    -k virtual-machines/ubuntu-legacy-web
 else
   echo '[WARN] KubeVirt VirtualMachine CRD unavailable; skipped server-side VM validation.'
 fi
