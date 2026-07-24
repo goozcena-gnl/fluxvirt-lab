@@ -7,11 +7,12 @@ Changes to `main` must be introduced through a pull request.
 
 ## Required validation
 
-The following GitHub Actions status check must pass before merge:
+The following GitHub Actions status checks must pass before merge:
 
-- `Static validation`
+- `Static validation`;
+- `static-validation`.
 
-The check performs:
+`Static validation` performs:
 
 - ShellCheck validation;
 - YAML linting;
@@ -19,6 +20,12 @@ The check performs:
 - Kubernetes schema validation with Kubeconform;
 - secret scanning with Gitleaks;
 - verification of independent Flux ownership.
+
+`static-validation` performs:
+
+- retrieval of the pinned KubeVirt and CDI manifests;
+- repository validation;
+- a pinned Trivy filesystem scan for HIGH and CRITICAL findings.
 
 Runtime acceptance is executed from the FluxVirt lab with:
 
