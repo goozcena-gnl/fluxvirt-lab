@@ -95,9 +95,12 @@ Resolve the current Kubernetes node IP:
 
 ```bash
 node_ip=$(
-  kubectl get node fluxvirt-lab \
-    -o jsonpath='{.status.addresses[?(@.type=="InternalIP")].address}'
+  kubectl get nodes \
+    -o jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}'
 )
+
+test -n "$node_ip"
+
 
 echo "$node_ip"
 ```

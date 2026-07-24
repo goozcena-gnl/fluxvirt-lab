@@ -44,7 +44,8 @@ The container workload uses:
 
 - component versions are pinned;
 - upstream KubeVirt and CDI manifests are vendored;
-- downloaded validation binaries are checksum-verified;
+- Repository CI checksum-verifies downloaded kubectl, Kubeconform,
+  and Gitleaks release artifacts;
 - mutable GitHub Action tags are prohibited for security-sensitive jobs.
 
 ## Threat boundaries

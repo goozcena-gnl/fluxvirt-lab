@@ -81,9 +81,12 @@ Explain that the same Kubernetes control plane operates:
 
 ```bash
 node_ip=$(
-  kubectl get node fluxvirt-lab \
-    -o jsonpath='{.status.addresses[?(@.type=="InternalIP")].address}'
+  kubectl get nodes \
+    -o jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}'
 )
+
+test -n "$node_ip"
+
 
 curl "http://${node_ip}:30080/"
 curl "http://${node_ip}:30081/"

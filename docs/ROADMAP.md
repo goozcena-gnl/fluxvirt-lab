@@ -21,14 +21,18 @@ Completed:
 - Dependabot version and security updates;
 - recruiter-facing documentation.
 
+Remaining gates before publication:
+
+- clean-room rebuild from a fresh outer Ubuntu VM, with timing and evidence;
+- documented VM disk or PVC backup and restore exercise;
+- tested disaster-recovery runbook with end-to-end acceptance evidence.
+
 ## v0.2.0 — reproducibility and resilience
 
 Planned:
 
-- clean-room rebuild from a fresh outer Ubuntu VM;
-- automated rebuild timing and evidence;
-- VM disk backup and restore exercise;
-- tested disaster-recovery runbook;
+- automated and repeatable clean-room rebuild validation;
+- recurring backup and restore validation;
 - SOPS with age for encrypted GitOps secrets;
 - NetworkPolicies for workload isolation;
 - improved release automation.
