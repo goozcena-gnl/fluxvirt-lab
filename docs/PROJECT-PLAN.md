@@ -145,5 +145,5 @@ historical phase labels, not the repository's SemVer release history:
 - `v1.0.0-portfolio-release`
 
 This sequence is superseded by `docs/ROADMAP.md`. The validated single-node
-MVP is the `v0.1.0` release candidate, and subsequent release numbering
-follows that roadmap.
+MVP defines the `v0.1.0` implementation baseline, and subsequent release
+numbering follows that roadmap.

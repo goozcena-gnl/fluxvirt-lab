@@ -3,10 +3,10 @@
 [![Repository CI](https://github.com/goozcena-gnl/fluxvirt-lab/actions/workflows/ci.yaml/badge.svg)](https://github.com/goozcena-gnl/fluxvirt-lab/actions/workflows/ci.yaml)
 [![Validation and Trivy](https://github.com/goozcena-gnl/fluxvirt-lab/actions/workflows/validate.yml/badge.svg)](https://github.com/goozcena-gnl/fluxvirt-lab/actions/workflows/validate.yml)
 
-> **Status:** `v0.1.0` release candidate. The complete Windows 11 Home →
-> VirtualBox → Ubuntu → nested KVM → K3s → Flux CD → KubeVirt/CDI path
-> has been validated with one running virtual machine and one container
-> workload.
+> **Status:** Validated single-node MVP (`v0.1.0` baseline). The complete
+> Windows 11 Home → VirtualBox → Ubuntu → nested KVM → K3s → Flux CD →
+> KubeVirt/CDI path has been validated with one running virtual machine
+> and one container workload.
 
 FluxVirt Lab is a reproducible cloud-native virtualization laboratory
 built on a Windows 11 Home workstation.
@@ -100,7 +100,6 @@ node_ip=$(
 )
 
 test -n "$node_ip"
-
 
 echo "$node_ip"
 ```

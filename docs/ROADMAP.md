@@ -2,7 +2,7 @@
 
 ## v0.1.0 — validated single-node MVP
 
-Status: release candidate.
+Status: validated implementation baseline.
 
 Completed:
 
