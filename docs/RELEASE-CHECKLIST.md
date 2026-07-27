@@ -45,15 +45,15 @@ RESTART_STABILITY_SECONDS=15 \
 
 ## Reproducibility and recovery
 
-- [ ] clean-room rebuild starts from a fresh outer Ubuntu VM
-- [ ] rebuild duration and environment details are recorded
-- [ ] clean-room static acceptance passes
-- [ ] clean-room runtime acceptance passes
-- [ ] VM disk or PVC backup is created
-- [ ] backup checksum and metadata are recorded
-- [ ] VM disk or PVC restore is completed
-- [ ] restored VM passes end-to-end acceptance
-- [ ] tested procedure is documented in `docs/BACKUP-RESTORE.md`
+- [x] clean-room rebuild starts from a fresh outer Ubuntu VM
+- [x] rebuild duration and environment details are recorded
+- [x] clean-room static acceptance passes
+- [x] clean-room runtime acceptance passes
+- [x] VM disk or PVC backup is created
+- [x] backup checksum and metadata are recorded
+- [x] VM disk or PVC restore is completed
+- [x] restored VM passes end-to-end acceptance
+- [x] tested procedure is documented in `docs/BACKUP-RESTORE.md`
 
 ## Governance
 

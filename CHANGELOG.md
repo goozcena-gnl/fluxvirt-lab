@@ -7,12 +7,10 @@ The project follows semantic versioning for formal releases.
 
 ### Planned
 
-- complete clean-room rebuild validation;
-- exercise VM disk backup and restore;
 - introduce encrypted GitOps secrets;
 - add policy-as-code and observability.
 
-## [0.1.0] - 2026-07-24
+## [0.1.0] - Unreleased
 
 ### Added
 
@@ -33,7 +31,17 @@ The project follows semantic versioning for formal releases.
 - pinned Trivy HIGH and CRITICAL filesystem scanning;
 - protected `main` branch and pull-request governance;
 - Dependabot version and security updates;
-- architecture, operations, security and portfolio documentation.
+- architecture, operations, security and portfolio documentation;
+- clean-room rebuild validation from a fresh outer Ubuntu virtual machine;
+- checksum-verified KubeVirt VM-disk export and isolated CDI restore;
+- read-only libguestfs verification of the restored system and web markers;
+- halted restored-VM construction without cloud-init replay and with a
+  distinct firmware identity;
+- restored VM first boot, QEMU Guest Agent validation and exact HTTP marker
+  verification through a temporary `virtctl port-forward`;
+- complete cleanup of the temporary VM, VMI, DataVolume, PVC and PV;
+- canonical runtime acceptance with the restored VM running and again after
+  cleanup.
 
 ### Security
 

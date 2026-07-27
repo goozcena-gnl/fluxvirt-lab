@@ -27,6 +27,8 @@ hardened container workload from Git.
 - repository validation with ShellCheck, yamllint and Kubeconform;
 - Gitleaks and Trivy security scanning;
 - protected-branch governance and pull-request-only changes;
+- a manually executed, checksum-verified VM-disk backup and isolated restore
+  lifecycle;
 - evidence-based runtime acceptance rather than configuration-only claims.
 
 ## Validated architecture
@@ -58,6 +60,7 @@ reconciliation diagrams.
 | Flux CD | All declared Kustomizations `Ready` |
 | KubeVirt | Available with allocatable KVM devices |
 | CDI | DataVolume import succeeded and PVC bound |
+| Recovery exercise | SHA-256-verified VM-disk backup, read-only offline marker verification, isolated restored-VM boot, exact HTTP verification, cleanup, and healthy protected source |
 | Virtual machine | Ubuntu guest `Running` and `Ready` |
 | Guest integration | QEMU Guest Agent connected |
 | VM service | Nginx page reachable through NodePort |
@@ -185,7 +188,9 @@ It does not claim:
 - production-grade ingress or load balancing.
 
 Persistent VM disks remain node-bound and require a separate backup
-strategy.
+strategy. The v0.1.0 baseline validates one manual, checksum-verified export
+and isolated restore exercise. It does not provide recurring backup
+automation, highly available storage, or production disaster recovery.
 
 ## Documentation
 
