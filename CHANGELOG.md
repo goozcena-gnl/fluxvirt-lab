@@ -10,7 +10,7 @@ The project follows semantic versioning for formal releases.
 - introduce encrypted GitOps secrets;
 - add policy-as-code and observability.
 
-## [0.1.0] - Unreleased
+## [0.1.0] - 2026-07-27
 
 ### Added
 
