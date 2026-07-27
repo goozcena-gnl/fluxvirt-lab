@@ -1,23 +1,86 @@
-# Security plan
+# Security
 
-## MVP
+## Implemented controls
 
-- SSH key authentication and restricted management subnet.
-- No passwords, private keys, PATs, kubeconfigs, or age private keys in Git.
-- Fixed component versions and vendored platform manifests.
-- GitHub Actions `contents: read` only.
-- Non-root container, dropped capabilities, read-only root filesystem, seccomp runtime default.
-- UFW permits only explicit management/API/NodePort paths.
-- Trivy filesystem scan pinned to the known-safe `trivy-action` v0.35.0 commit and Trivy v0.69.3; mutable tags are prohibited because of the March 2026 Trivy supply-chain incident.
+### Repository and delivery
 
-## Intermediate
+- GitHub Actions permissions restricted to `contents: read`;
+- third-party actions pinned to immutable commit SHAs;
+- Gitleaks scans the complete Git history;
+- Trivy scans the repository for HIGH and CRITICAL findings;
+- GitHub secret scanning and push protection are enabled;
+- Dependabot version and security updates are enabled;
+- `main` requires pull requests and both CI security checks;
+- force pushes and branch deletion are blocked;
+- review conversations must be resolved before merge.
 
-- SOPS with age for Kubernetes secrets.
-- Kyverno in Audit first, then Enforce after reviewing false positives.
-- Gitleaks or TruffleHog secret scanning.
-- Dependabot/Renovate with controlled upgrade PRs.
-- NetworkPolicies and signed project images.
+### Credentials and secrets
+
+The repository must not contain:
+
+- passwords;
+- PATs or API tokens;
+- private SSH keys;
+- kubeconfigs;
+- SOPS or age private keys;
+- cloud credentials;
+- generated files containing secrets.
+
+The KubeVirt guest SSH private key is stored outside the repository.
+
+### Workloads
+
+The container workload uses:
+
+- a non-root user;
+- dropped Linux capabilities;
+- a read-only root filesystem;
+- `RuntimeDefault` seccomp;
+- disabled service-account token mounting;
+- CPU and memory requests and limits;
+- readiness and liveness probes.
+
+### Supply chain
+
+- component versions are pinned;
+- upstream KubeVirt and CDI manifests are vendored;
+- Repository CI checksum-verifies downloaded kubectl, Kubeconform,
+  and Gitleaks release artifacts;
+- mutable GitHub Action tags are prohibited for security-sensitive jobs.
 
 ## Threat boundaries
 
-Treat Windows, the hypervisor, outer Ubuntu, Kubernetes API, Flux deploy credentials, privileged KubeVirt components, CDI image sources, cloud-init, and guest SSH as separate trust boundaries. `/dev/kvm` is intentionally privileged access to hardware virtualization and should not be made broadly writable.
+Treat the following as distinct trust boundaries:
+
+- Windows host;
+- VirtualBox hypervisor;
+- outer Ubuntu VM;
+- Kubernetes API;
+- Flux deployment credentials;
+- privileged KubeVirt components;
+- CDI image sources;
+- cloud-init data;
+- KubeVirt guest;
+- guest SSH credentials.
+
+`/dev/kvm` intentionally exposes hardware virtualization and must not be
+made broadly writable.
+
+## Planned improvements
+
+- SOPS with age for encrypted GitOps secrets;
+- Kyverno policy enforcement;
+- Kubernetes NetworkPolicies;
+- SBOM generation;
+- image signing and signature verification;
+- dedicated vulnerability triage documentation;
+- periodic credential and Git-history audits.
+
+## Reporting security issues
+
+Do not disclose active credentials or exploitable findings in a public
+issue.
+
+Revoke or rotate an exposed credential first, preserve relevant
+evidence, and then document the remediation without reproducing the
+secret.

@@ -132,7 +132,10 @@ At least one advanced capability is empirically validated, capacity limits are r
 | Scope creep | High | Medium | milestone gates; exclude advanced stack from MVP |
 | Version drift | Medium | High | central pins, ADRs, upgrade branch and compatibility validation |
 
-## GitHub milestones
+## Historical phase labels
+
+The following labels came from the initial implementation plan. They are
+historical phase labels, not the repository's SemVer release history:
 
 - `v0.1.0-windows-home-preflight`
 - `v0.2.0-virtualbox-ubuntu-lab`
@@ -140,3 +143,7 @@ At least one advanced capability is empirically validated, capacity limits are r
 - `v0.4.0-flux-bootstrap`
 - `v0.5.0-kubevirt-mvp`
 - `v1.0.0-portfolio-release`
+
+This sequence is superseded by `docs/ROADMAP.md`. The validated single-node
+MVP defines the `v0.1.0` implementation baseline, and subsequent release
+numbering follows that roadmap.

@@ -38,6 +38,29 @@ export KUBECONFIG="$HOME/.kube/config"
 profile_line="export KUBECONFIG=\"\$HOME/.kube/config\""
 grep -qxF "$profile_line" "$HOME/.profile" ||   printf '\n%s\n' "$profile_line" >> "$HOME/.profile"
 
+wait_for_kubernetes_api_and_node() {
+  local deadline=$((SECONDS + 300))
+
+  while (( SECONDS < deadline )); do
+    if kubectl get --raw='/readyz' >/dev/null 2>&1 &&
+       [[ -n $(kubectl get nodes --no-headers 2>/dev/null) ]]; then
+      return 0
+    fi
+
+    sleep 5
+  done
+
+  return 1
+}
+
+echo '[INFO] Waiting for Kubernetes API readiness and initial Node registration.'
+
+if ! wait_for_kubernetes_api_and_node; then
+  echo '[ERROR] Kubernetes API or initial Node did not become available within 300 seconds.' >&2
+  sudo systemctl status k3s --no-pager --full || true
+  exit 1
+fi
+
 kubectl wait --for=condition=Ready node --all --timeout=300s
 kubectl get nodes -o wide
 
