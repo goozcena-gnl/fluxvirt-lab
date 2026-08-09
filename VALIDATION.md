@@ -1,5 +1,29 @@
 # Validation report
 
+> **Historical scope:** This report records the evidence available on
+> 2026-07-22. It predates the later runtime acceptance, recovery exercise,
+> release pull request, and v0.1.0 publication described below.
+
+## Current evidence reconciliation
+
+Reconciled on 2026-08-09 from repository-retained documents and GitHub
+records:
+
+| Capability | Dated evidence | Conclusion |
+|---|---|---|
+| Windows host preflight | `docs/evidence/phase-0-native-boot.md`, 2026-07-22 | VERIFIED |
+| VirtualBox host readiness | `docs/evidence/phase-1-virtualbox-host.md`, 2026-07-22 | VERIFIED |
+| Nested KVM, K3s, Flux CD, KubeVirt, CDI, VM and container | [PR #3](https://github.com/goozcena-gnl/fluxvirt-lab/pull/3) runtime output, merged 2026-07-27; v0.1.0 Release, 2026-07-27 | DOCUMENTED BUT NOT INDEPENDENTLY RETAINED |
+| VM-disk recovery | `docs/BACKUP-RESTORE.md` run marker and SHA-256; v0.1.0 Release, 2026-07-27 | DOCUMENTED BUT NOT INDEPENDENTLY RETAINED |
+| Repository CI and Validation/Trivy | Latest `main` runs for commit `5a80b68`, 2026-07-28 | VERIFIED — STATIC ONLY |
+
+[PR #3](https://github.com/goozcena-gnl/fluxvirt-lab/pull/3) retains concise acceptance output covering Flux reconciliation,
+KubeVirt/CDI state, VM and container readiness, QEMU Guest Agent connectivity,
+and both HTTP endpoints. The recovery guide retains a run-specific marker and
+backup checksum, but says its 22 detailed artifacts remain outside the
+repository. Current-facing documents therefore describe these as recorded,
+bounded v0.1.0 results rather than independently reproducible raw evidence.
+
 Validation date: 2026-07-22
 Target host profile: Windows 11 Home x86_64 with Oracle VirtualBox 7.2.14
 
@@ -39,7 +63,7 @@ Target host profile: Windows 11 Home x86_64 with Oracle VirtualBox 7.2.14
 - The first VM-creation attempt was blocked by a PowerShell parser defect before execution; the ambiguous `$LASTEXITCODE:` interpolation has been corrected.
 - Phase 1 host evidence is stored in `docs/evidence/phase-1-virtualbox-host.md`.
 
-## Not executed or not yet empirically verified
+## Not executed or not yet empirically verified at this observation point
 
 - Outer VirtualBox VM creation and configuration readiness.
 - VirtualBox nested VT-x/AMD-V exposure.
@@ -53,4 +77,6 @@ Target host profile: Windows 11 Home x86_64 with Oracle VirtualBox 7.2.14
 - Container workload deployment.
 - GitHub Actions execution.
 
-No runtime component is represented as successful until evidence from the target workstation is captured.
+At this 2026-07-22 observation point, no runtime component was represented as
+successful because later target-workstation evidence had not yet been
+recorded.

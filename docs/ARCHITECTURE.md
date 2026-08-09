@@ -63,9 +63,13 @@ flowchart LR
   SVC[NodePort Service] --> VM
 ```
 
-## Validated implementation state
+## v0.1.0 recorded implementation state
 
-| Layer | Runtime evidence |
+The table summarizes the bounded runtime record reconciled in
+[`VALIDATION.md`](../VALIDATION.md). Detailed raw runtime artifacts are not
+retained in this repository.
+
+| Layer | Recorded result |
 |---|---|
 | Windows | dedicated lab boot with Microsoft hypervisor inactive |
 | VirtualBox | nested hardware virtualization enabled |

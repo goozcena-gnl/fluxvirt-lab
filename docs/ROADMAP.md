@@ -1,8 +1,9 @@
 # Roadmap
 
-## v0.1.0 — validated single-node MVP
+## v0.1.0 — published single-node MVP
 
-Status: validated implementation baseline.
+Status: published implementation baseline. Runtime and recovery results are
+documented, while the detailed raw artifacts remain outside the repository.
 
 Completed:
 
@@ -21,11 +22,12 @@ Completed:
 - Dependabot version and security updates;
 - recruiter-facing documentation.
 
-Remaining gates before publication:
+Completed manual release gates:
 
 - clean-room rebuild from a fresh outer Ubuntu VM, with timing and evidence;
-- documented VM disk or PVC backup and restore exercise;
-- tested disaster-recovery runbook with end-to-end acceptance evidence.
+- documented VM disk backup and isolated restore exercise;
+- tested recovery runbook with bounded end-to-end acceptance evidence;
+- v0.1.0 tag and GitHub Release publication on 2026-07-27.
 
 ## v0.2.0 — reproducibility and resilience
 

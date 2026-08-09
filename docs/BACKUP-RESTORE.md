@@ -1,7 +1,13 @@
 # Backup, restore, and rebuild
 
 This document describes the VM-disk recovery exercise validated for the
-FluxVirt Lab v0.1.0 release candidate.
+FluxVirt Lab v0.1.0 release.
+
+Evidence-retention boundary: this document preserves the run-specific marker,
+backup SHA-256 and tested sequence, while the 22 detailed recovery artifacts
+remain outside the repository. Treat the result as one bounded operator record,
+not as proof of recurring backup automation or independently reproducible
+disaster recovery.
 
 Git stores the desired Kubernetes state, scripts and documentation. It does
 not back up PVC data, private SSH keys, SOPS age keys, kubeconfig files,

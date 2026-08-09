@@ -2,19 +2,19 @@
 
 ## Repository description
 
-GitOps-managed K3s and KubeVirt laboratory on Ubuntu Server, running a
-persistent virtual machine and a hardened container through Flux CD
-inside a reproducible VirtualBox environment on Windows 11 Home.
+KubeVirt and Flux CD lab for running virtual machines and containers on
+K3s, with nested-virtualization, GitOps, and VM-recovery evidence.
 
 ## Elevator pitch
 
 FluxVirt Lab demonstrates how I design, secure and operate a hybrid
 Kubernetes platform rather than only deploying an application.
 
-The project validates a Windows Home → VirtualBox → Ubuntu → nested KVM
-virtualization chain, deploys K3s, reconciles KubeVirt and CDI with Flux,
-and operates both a persistent Ubuntu VM and a hardened container from
-Git.
+The published v0.1.0 record documents a Windows Home → VirtualBox → Ubuntu →
+nested KVM virtualization chain, K3s and Flux reconciliation, KubeVirt/CDI,
+a persistent Ubuntu VM, a hardened container, and one isolated VM-disk
+recovery exercise. See [`VALIDATION.md`](../VALIDATION.md) for the retained
+evidence boundary.
 
 The repository includes automated validation, vulnerability and secret
 scanning, protected-branch governance, runtime acceptance and
@@ -67,9 +67,9 @@ architecture documentation.
 - explicit limitations and failure boundaries;
 - troubleshooting based on evidence.
 
-## Verifiable outcomes
+## Recorded v0.1.0 outcomes
 
-The repository proves:
+The release record and PR #3 document:
 
 - a K3s node is Ready;
 - all Flux Kustomizations reconcile successfully;
@@ -127,6 +127,6 @@ The current MVP is deliberately:
 
 ## GitHub topics
 
-`kubernetes`, `kubevirt`, `fluxcd`, `gitops`, `k3s`, `ubuntu`,
-`virtualbox`, `windows-11-home`, `nested-virtualization`, `devops`,
-`platform-engineering`, `infrastructure-as-code`, `sre`, `devsecops`
+`kubevirt`, `kubernetes-virtualization`, `fluxcd`, `gitops`, `k3s`,
+`virtual-machines`, `cdi`, `nested-virtualization`, `cloud-init`,
+`kustomize`, `virtualbox`, `backup-restore`
