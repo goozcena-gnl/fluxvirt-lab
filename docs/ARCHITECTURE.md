@@ -89,6 +89,13 @@ container restarts from active instability. A non-zero lifetime restart
 count is accepted only when it remains stable during the observation
 window and the workload remains Ready and reachable.
 
+## Architecture decisions
+
+- [ADR 0001: Hypervisor selection for Windows 11 Home](adr/0001-hypervisor-selection.md)
+- [ADR 0002: Ubuntu version](adr/0002-ubuntu-version.md)
+- [ADR 0003: Kubernetes distribution](adr/0003-kubernetes-distribution.md)
+- [ADR 0004: MVP storage strategy](adr/0004-storage-strategy.md)
+
 ## Design principles
 
 - One outer Ubuntu VM and one Kubernetes node for the MVP.

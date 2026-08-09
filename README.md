@@ -21,7 +21,7 @@ hardware virtualization. Ubuntu hosts a single-node K3s cluster where
 Flux CD reconciles KubeVirt, CDI, an Ubuntu virtual machine and a
 hardened container workload from Git.
 
-## What this project demonstrates
+## Capabilities
 
 - validating native VT-x, SLAT and nested KVM on Windows 11 Home;
 - provisioning a repeatable VirtualBox and Ubuntu environment;
@@ -158,7 +158,7 @@ Detailed instructions are available in
 - `virtual-machines/`: KubeVirt VM and DataVolume definitions;
 - `apps/`: hardened container workload;
 - `scripts/`: bootstrap, preflight, validation and teardown helpers;
-- `docs/`: architecture, operations, security and portfolio material;
+- `docs/`: architecture, operations, security and project-summary material;
 - `.github/workflows/`: required static and security CI gates.
 
 ## Security and governance
@@ -181,7 +181,7 @@ See [Security](docs/SECURITY.md) and
 
 ## Intentional boundaries
 
-The v0.1.0 MVP is a single-node learning and portfolio environment.
+The v0.1.0 MVP is a single-node learning and engineering environment.
 
 It does not claim:
 
@@ -201,8 +201,8 @@ automation, highly available storage, or production disaster recovery.
 
 - [Architecture](docs/ARCHITECTURE.md)
 - [Installation](docs/INSTALLATION.md)
-- [Recruiter demonstration](docs/DEMO.md)
-- [Portfolio positioning](docs/PORTFOLIO.md)
+- [Technical walkthrough](docs/DEMO.md)
+- [Project summary](docs/PORTFOLIO.md)
 - [Security](docs/SECURITY.md)
 - [Governance](docs/GOVERNANCE.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
