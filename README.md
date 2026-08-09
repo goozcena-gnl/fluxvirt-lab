@@ -10,6 +10,12 @@ The published v0.1.0 record (2026-07-27) documents the Windows 11 Home → Virtu
 
 Evidence: [dated reconciliation](VALIDATION.md), [published release](https://github.com/goozcena-gnl/fluxvirt-lab/releases/tag/v0.1.0), and [bounded recovery record](docs/BACKUP-RESTORE.md).
 
+<p align="center">
+  <img src="docs/assets/portfolio/fluxvirt-evidence-boundary.svg" alt="FluxVirt nested Kubernetes virtualization architecture with retained, documented, external-not-retained, and static-CI-only evidence classes" width="100%" />
+</p>
+
+<p align="center"><sub><strong>Recorded architecture + evidence classes.</strong> The diagram preserves the distinction between concise retained records, documented runtime outcomes, full raw artifacts held externally, and repository-only static CI.</sub></p>
+
 Oracle VirtualBox runs an Ubuntu Server virtual machine with nested
 hardware virtualization. Ubuntu hosts a single-node K3s cluster where
 Flux CD reconciles KubeVirt, CDI, an Ubuntu virtual machine and a
