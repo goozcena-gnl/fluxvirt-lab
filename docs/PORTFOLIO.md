@@ -1,14 +1,14 @@
-# Portfolio positioning
+# Project summary
 
 ## Repository description
 
 KubeVirt and Flux CD lab for running virtual machines and containers on
 K3s, with nested-virtualization, GitOps, and VM-recovery evidence.
 
-## Elevator pitch
+## Project overview
 
-FluxVirt Lab demonstrates how I design, secure and operate a hybrid
-Kubernetes platform rather than only deploying an application.
+FluxVirt Lab demonstrates the design, security and operation of a hybrid
+Kubernetes platform rather than only the deployment of an application.
 
 The published v0.1.0 record documents a Windows Home → VirtualBox → Ubuntu →
 nested KVM virtualization chain, K3s and Flux reconciliation, KubeVirt/CDI,
@@ -20,7 +20,7 @@ The repository includes automated validation, vulnerability and secret
 scanning, protected-branch governance, runtime acceptance and
 architecture documentation.
 
-## Engineering competencies demonstrated
+## Engineering scope
 
 ### Systems and virtualization
 
@@ -83,7 +83,7 @@ The release record and PR #3 document:
 - both required CI security gates pass;
 - direct pushes to `main` are rejected.
 
-## CV bullets
+## Technical highlights
 
 - Designed and operated a Windows 11 Home nested-virtualization lab
   running K3s and KubeVirt on Ubuntu Server with explicit hardware
@@ -99,11 +99,11 @@ The release record and PR #3 document:
 - Enforced protected-branch governance with required pull requests,
   status checks, squash merges and blocked force pushes.
 - Documented architecture, security boundaries, failure modes, backup
-  strategy and a reproducible recruiter demonstration.
+  strategy and a reproducible technical walkthrough.
 
-## Interview narrative
+## Technical review sequence
 
-A useful discussion sequence is:
+A useful technical review sequence is:
 
 1. why nested virtualization on Windows Home is non-trivial;
 2. how the host-mode preflight prevents false assumptions;
@@ -123,7 +123,7 @@ The current MVP is deliberately:
 - local-path-backed;
 - non-migratable;
 - NAT-exposed;
-- operated as a controlled learning and portfolio environment.
+- operated as a controlled learning and engineering environment.
 
 ## GitHub topics
 

@@ -1,6 +1,6 @@
-# Recruiter demonstration
+# Technical walkthrough
 
-This demonstration is designed for a 10–15 minute technical discussion.
+This walkthrough supports a 10–15 minute operator-led technical review.
 
 Every claim must be supported by visible command output or a working
 endpoint.
@@ -138,7 +138,7 @@ Flux applying the new revision.
 Do not perform a live change unless enough time remains to complete and
 verify the full reconciliation.
 
-## 10. Close honestly
+## 10. Close with operating boundaries
 
 State that the project demonstrates GitOps, validation and recovery methods
 but is intentionally a single-node laboratory.
