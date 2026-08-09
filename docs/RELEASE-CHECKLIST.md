@@ -1,38 +1,44 @@
 # Release checklist
 
+> **Status reconciled 2026-08-09:** v0.1.0 was published on 2026-07-27.
+> Checked runtime and recovery items reflect the bounded PR #3 and published
+> release records; their detailed raw artifacts are not retained in this
+> repository. Unchecked items remain unverified rather than implicitly
+> complete.
+
 ## Repository state
 
-- [ ] Release branch is based on current `main`
+- [x] Release tag targets the release-time `main` commit
 - [ ] Working tree is clean
-- [ ] No unresolved merge conflicts
-- [ ] Version and date are consistent
-- [ ] README reflects the current operational state
-- [ ] Changelog contains the release
+- [x] No unresolved merge conflicts
+- [x] Version and date are consistent
+- [x] README reflects the current operational state
+- [x] Changelog contains the release
 
 ## Static validation
 
-- [ ] `bash -n` passes
-- [ ] ShellCheck passes
-- [ ] yamllint passes
-- [ ] all Kustomize roots render
-- [ ] Kubeconform passes
+- [x] `bash -n` passes
+- [x] ShellCheck passes
+- [x] yamllint passes
+- [x] all Kustomize roots render
+- [x] Kubeconform passes
 - [ ] server-side VM dry-run passes
-- [ ] Gitleaks reports no leaks
-- [ ] Trivy reports no blocking findings
+- [x] Gitleaks reports no leaks
+- [x] Trivy reports no blocking findings
 
 ## Runtime validation
 
-- [ ] all Flux Kustomizations are Ready
-- [ ] KubeVirt is Available
-- [ ] KVM devices are allocatable
-- [ ] VM and VMI are Running and Ready
-- [ ] QEMU Guest Agent is connected
-- [ ] DataVolume is Succeeded
-- [ ] PVC is Bound
-- [ ] container Deployment is available
-- [ ] container restart count remains stable
-- [ ] VM HTTP endpoint responds
-- [ ] container HTTP endpoint responds
+- [x] all Flux Kustomizations are Ready
+- [x] KubeVirt is Available
+- [x] KVM devices are allocatable
+- [x] VM and VMI are Running and Ready
+- [x] QEMU Guest Agent is connected
+- [x] DataVolume is Succeeded
+- [x] PVC is Bound
+- [x] container Deployment is available
+- [x] container restart count remains stable
+- [x] VM HTTP endpoint responds
+- [x] container HTTP endpoint responds
 
 Run:
 
@@ -57,26 +63,26 @@ RESTART_STABILITY_SECONDS=15 \
 
 ## Governance
 
-- [ ] release change is submitted through a pull request
-- [ ] both required CI checks pass
-- [ ] review conversations are resolved
-- [ ] pull request is squash merged
-- [ ] direct push protection remains active
+- [x] release change is submitted through a pull request
+- [x] both required CI checks pass
+- [x] review conversations are resolved
+- [x] pull request is squash merged
+- [x] direct push protection remains active
 
 ## Release publication
 
-- [ ] squash commit for the release pull request is present on `main`
-- [ ] annotated `v0.1.0` tag created from `main`
-- [ ] tag pushed
-- [ ] GitHub Release created
-- [ ] release notes reviewed
-- [ ] source archives visible
-- [ ] repository description and topics updated
+- [x] squash commit for the release pull request is present on `main`
+- [ ] annotated `v0.1.0` tag independently verified
+- [x] tag pushed
+- [x] GitHub Release created
+- [x] release notes reviewed
+- [x] source archives visible
+- [x] repository description and topics updated
 
 ## Post-release
 
 - [ ] `git describe --tags --always` returns `v0.1.0`
 - [ ] Flux reconciles the tagged release commit
-- [ ] static acceptance still passes
+- [x] static acceptance still passes
 - [ ] runtime acceptance still passes
-- [ ] release URL opens successfully
+- [x] release URL opens successfully

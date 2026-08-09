@@ -140,8 +140,8 @@ verify the full reconciliation.
 
 ## 10. Close honestly
 
-State that the project demonstrates production-oriented methods but is
-intentionally a single-node laboratory.
+State that the project demonstrates GitOps, validation and recovery methods
+but is intentionally a single-node laboratory.
 
 Discuss the next engineering steps:
 

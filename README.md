@@ -1,15 +1,14 @@
 # FluxVirt Lab
 
-[![Repository CI](https://github.com/goozcena-gnl/fluxvirt-lab/actions/workflows/ci.yaml/badge.svg)](https://github.com/goozcena-gnl/fluxvirt-lab/actions/workflows/ci.yaml)
-[![Validation and Trivy](https://github.com/goozcena-gnl/fluxvirt-lab/actions/workflows/validate.yml/badge.svg)](https://github.com/goozcena-gnl/fluxvirt-lab/actions/workflows/validate.yml)
+> A reproducible Kubernetes virtualization lab where Flux CD reconciles KubeVirt virtual machines and hardened containers on a single-node K3s cluster.
 
-> **Status:** Validated single-node MVP (`v0.1.0` baseline). The complete
-> Windows 11 Home → VirtualBox → Ubuntu → nested KVM → K3s → Flux CD →
-> KubeVirt/CDI path has been validated with one running virtual machine
-> and one container workload.
+The published v0.1.0 record (2026-07-27) documents the Windows 11 Home → VirtualBox → Ubuntu → nested KVM path, VM/container acceptance, and one checksum-verified isolated VM-disk recovery exercise. [PR #3](https://github.com/goozcena-gnl/fluxvirt-lab/pull/3) retains concise runtime output and the recovery guide retains run-specific checksum and marker metadata; the full raw artifacts remain outside the repository.
 
-FluxVirt Lab is a reproducible cloud-native virtualization laboratory
-built on a Windows 11 Home workstation.
+[![Repository CI](https://github.com/goozcena-gnl/fluxvirt-lab/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/goozcena-gnl/fluxvirt-lab/actions/workflows/ci.yaml)
+[![Validation and Trivy](https://github.com/goozcena-gnl/fluxvirt-lab/actions/workflows/validate.yml/badge.svg?branch=main)](https://github.com/goozcena-gnl/fluxvirt-lab/actions/workflows/validate.yml)
+[![Release](https://img.shields.io/github/v/release/goozcena-gnl/fluxvirt-lab?display_name=tag&sort=semver)](https://github.com/goozcena-gnl/fluxvirt-lab/releases/latest)
+
+Evidence: [dated reconciliation](VALIDATION.md), [published release](https://github.com/goozcena-gnl/fluxvirt-lab/releases/tag/v0.1.0), and [bounded recovery record](docs/BACKUP-RESTORE.md).
 
 Oracle VirtualBox runs an Ubuntu Server virtual machine with nested
 hardware virtualization. Ubuntu hosts a single-node K3s cluster where
@@ -31,7 +30,7 @@ hardened container workload from Git.
   lifecycle;
 - evidence-based runtime acceptance rather than configuration-only claims.
 
-## Validated architecture
+## v0.1.0 recorded architecture
 
 ```text
 Windows 11 Home x86_64
@@ -49,9 +48,9 @@ Windows 11 Home x86_64
 See [Architecture](docs/ARCHITECTURE.md) for the component and
 reconciliation diagrams.
 
-## Validated MVP
+## v0.1.0 evidence summary
 
-| Capability | Validated result |
+| Capability | Recorded result |
 |---|---|
 | Windows host mode | Microsoft hypervisor disabled in the dedicated lab boot |
 | VirtualBox | Nested hardware virtualization enabled |
@@ -188,7 +187,7 @@ It does not claim:
 - production-grade ingress or load balancing.
 
 Persistent VM disks remain node-bound and require a separate backup
-strategy. The v0.1.0 baseline validates one manual, checksum-verified export
+strategy. The v0.1.0 record documents one manual, checksum-verified export
 and isolated restore exercise. It does not provide recurring backup
 automation, highly available storage, or production disaster recovery.
 
