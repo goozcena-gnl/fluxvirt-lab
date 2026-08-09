@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">FluxVirt architecture and evidence boundary</title><desc id="desc">Nested Windows, VirtualBox, Ubuntu, K3s, Flux, KubeVirt and CDI architecture with explicit retained, documented, external, and static-only evidence classes.</desc>
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071426"/><stop offset="1" stop-color="#1c1921"/></linearGradient><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0l8 4-8 4z" fill="#fbbf24"/></marker></defs>
+  <rect width="1200" height="650" rx="24" fill="url(#bg)"/>
+  <text x="52" y="58" fill="#f8fafc" font-family="Arial, sans-serif" font-size="29" font-weight="800">KUBERNETES VIRTUALIZATION · RECORDED ARCHITECTURE</text>
+  <text x="52" y="88" fill="#94a3b8" font-family="Arial, sans-serif" font-size="15">Evidence class is shown separately from the component path.</text>
+  <g transform="translate(52 122)" font-family="Arial, sans-serif">
+    <rect width="610" height="462" rx="22" fill="#0b1728" stroke="#475569"/>
+    <text x="28" y="40" fill="#fcd34d" font-size="15" font-weight="800" letter-spacing="1">NESTED HOST + GITOPS PATH</text>
+    <g text-anchor="middle" font-size="16" font-weight="800">
+      <rect x="32" y="65" width="546" height="48" rx="12" fill="#172033" stroke="#fbbf24"/><text x="305" y="95" fill="#fef3c7">WINDOWS HOST</text>
+      <rect x="56" y="132" width="498" height="48" rx="12" fill="#172033" stroke="#fbbf24"/><text x="305" y="162" fill="#fef3c7">VIRTUALBOX</text>
+      <rect x="80" y="199" width="450" height="48" rx="12" fill="#172033" stroke="#fbbf24"/><text x="305" y="229" fill="#fef3c7">UBUNTU · NESTED KVM</text>
+      <rect x="104" y="266" width="402" height="48" rx="12" fill="#172033" stroke="#fbbf24"/><text x="305" y="296" fill="#fef3c7">K3S · FLUX CD</text>
+      <rect x="128" y="333" width="354" height="48" rx="12" fill="#172033" stroke="#fbbf24"/><text x="305" y="363" fill="#fef3c7">KUBEVIRT · CDI</text>
+    </g>
+    <path d="M305 113v19M305 180v19M305 247v19M305 314v19" stroke="#fbbf24" stroke-width="3" marker-end="url(#arrow)"/>
+    <g font-size="14" font-weight="700"><rect x="128" y="405" width="164" height="38" rx="19" fill="#713f12"/><text x="210" y="429" text-anchor="middle" fill="#fef3c7">KUBEVIRT VM</text><rect x="318" y="405" width="164" height="38" rx="19" fill="#713f12"/><text x="400" y="429" text-anchor="middle" fill="#fef3c7">CONTAINER</text></g>
+  </g>
+  <g transform="translate(690 122)" font-family="Arial, sans-serif">
+    <rect width="458" height="462" rx="22" fill="#0b1728" stroke="#475569"/>
+    <text x="24" y="40" fill="#e2e8f0" font-size="15" font-weight="800" letter-spacing="1">EVIDENCE BOUNDARY</text>
+    <rect x="22" y="62" width="414" height="82" rx="14" fill="#0d2b24" stroke="#4ade80"/><rect x="38" y="78" width="96" height="22" rx="11" fill="#14532d"/><text x="54" y="94" fill="#dcfce7" font-size="12" font-weight="800">RETAINED</text><text x="38" y="122" fill="#cbd5e1" font-size="14">Concise PR/runtime output + recovery</text><text x="38" y="139" fill="#94a3b8" font-size="12">checksums and marker metadata</text>
+    <rect x="22" y="158" width="414" height="82" rx="14" fill="#29210d" stroke="#fbbf24"/><rect x="38" y="174" width="116" height="22" rx="11" fill="#713f12"/><text x="54" y="190" fill="#fef3c7" font-size="12" font-weight="800">DOCUMENTED</text><text x="38" y="218" fill="#cbd5e1" font-size="14">K3s, Flux, KubeVirt, CDI, VM and</text><text x="38" y="235" fill="#94a3b8" font-size="12">container outcomes in the v0.1.0 record</text>
+    <rect x="22" y="254" width="414" height="82" rx="14" fill="#241b35" stroke="#a78bfa" stroke-dasharray="8 6"/><rect x="38" y="270" width="178" height="22" rx="11" fill="#4c1d95"/><text x="54" y="286" fill="#ede9fe" font-size="12" font-weight="800">EXTERNAL / NOT RETAINED</text><text x="38" y="314" fill="#cbd5e1" font-size="14">Full raw runtime and recovery artifacts</text><text x="38" y="331" fill="#94a3b8" font-size="12">remain outside the public repository</text>
+    <rect x="22" y="350" width="414" height="82" rx="14" fill="#10253a" stroke="#38bdf8"/><rect x="38" y="366" width="124" height="22" rx="11" fill="#164e63"/><text x="54" y="382" fill="#cffafe" font-size="12" font-weight="800">STATIC CI ONLY</text><text x="38" y="410" fill="#cbd5e1" font-size="14">Shell, YAML, manifests, ownership,</text><text x="38" y="427" fill="#94a3b8" font-size="12">Gitleaks history and Trivy filesystem scan</text>
+  </g>
+  <path d="M52 611h1096" stroke="#334155"/><text x="52" y="630" fill="#64748b" font-family="Arial, sans-serif" font-size="12">RECOVERY SCOPE: ONE CHECKSUM-VERIFIED ISOLATED VM-DISK EXERCISE · NO HA, LIVE MIGRATION, RTO/RPO, OR PRODUCTION-STORAGE CLAIM</text>
+</svg>
