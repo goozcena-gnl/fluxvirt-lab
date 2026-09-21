@@ -41,6 +41,11 @@ curl \
   --output "$tmp/CHECKSUMS" \
   "${release_url}/CHECKSUMS"
 
+if ! grep -q " ${archive}$" "$tmp/CHECKSUMS"; then
+  echo "[ERROR] Missing checksum entry for ${archive} in upstream CHECKSUMS." >&2
+  exit 1
+fi
+
 (
   cd "$tmp"
   grep " ${archive}$" CHECKSUMS |
