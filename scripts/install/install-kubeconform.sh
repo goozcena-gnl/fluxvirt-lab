@@ -61,13 +61,20 @@ printf '%s  %s\n' \
   "$tmp/$archive" |
   sha256sum --check -
 
-tar -xzf "$tmp/$archive" -C "$tmp" kubeconform
+tar -xzf "$tmp/$archive" -C "$tmp"
+
+binary_path=$(find "$tmp" -maxdepth 2 -type f -name kubeconform -print -quit)
+
+if [[ -z "$binary_path" ]]; then
+  echo "[ERROR] kubeconform binary not found after extracting ${archive}." >&2
+  exit 1
+fi
 
 if mkdir -p "$install_dir" 2>/dev/null && [[ -w "$install_dir" ]]; then
-  install --mode=0755 "$tmp/kubeconform" "$install_dir/kubeconform"
+  install --mode=0755 "$binary_path" "$install_dir/kubeconform"
 else
   sudo mkdir -p "$install_dir"
-  sudo install --mode=0755 "$tmp/kubeconform" "$install_dir/kubeconform"
+  sudo install --mode=0755 "$binary_path" "$install_dir/kubeconform"
 fi
 
 "$install_dir/kubeconform" -v
