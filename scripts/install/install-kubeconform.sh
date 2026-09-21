@@ -49,9 +49,9 @@ if [[ -z "$checksum_line" ]]; then
   exit 1
 fi
 
-expected_checksum_line="${KUBECONFORM_LINUX_AMD64_SHA256}  ${archive}"
+upstream_checksum=$(awk '{print $1}' <<<"$checksum_line")
 
-if [[ "$checksum_line" != "$expected_checksum_line" ]]; then
+if [[ "$upstream_checksum" != "$KUBECONFORM_LINUX_AMD64_SHA256" ]]; then
   echo "[ERROR] Upstream CHECKSUMS entry for ${archive} does not match the pinned official checksum." >&2
   exit 1
 fi

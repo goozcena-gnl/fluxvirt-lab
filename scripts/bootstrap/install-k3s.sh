@@ -8,6 +8,7 @@ verify_only=false
 
 if [[ ${1:-} == '--verify-only' ]]; then
   verify_only=true
+  shift
 fi
 
 verify_k3s_installer() {
