@@ -15,22 +15,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
-      - name: Load pinned project versions
-        shell: bash
-        run: |
-          set -Eeuo pipefail
-          while IFS='=' read -r name value; do
-            case "$name" in
-              KUBERNETES_VERSION)
-                printf '%s=%s\n' "$name" "$value" >> "$GITHUB_ENV"
-                ;;
-            esac
-          done < versions.env
-
       - name: Install validation tools
         shell: bash
         run: |
           set -Eeuo pipefail
+          # shellcheck disable=SC1091
+          source ./versions.env
           python3 -m pip install --user yamllint==1.35.1
           sudo apt-get update
           sudo apt-get install -y shellcheck tar
