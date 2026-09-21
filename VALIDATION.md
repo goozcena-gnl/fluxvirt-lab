@@ -32,7 +32,10 @@ Executed in this repository sandbox:
   published `.sha256` sidecar before local installation.
 - `./scripts/install/install-kubeconform.sh --install-dir "$HOME/.local/bin"`
   verified `kubeconform-linux-amd64.tar.gz` for `v0.7.0` against the
-  upstream `CHECKSUMS` file before local installation.
+  pinned official SHA-256
+  `c31518ddd122663b3f3aa874cfe8178cb0988de944f29c74a0b9260920d115d3`
+  and confirmed that the upstream `CHECKSUMS` entry still matches before
+  local installation.
 - `./scripts/bootstrap/install-k3s.sh --verify-only` verified the vendored
   `vendor/k3s/install-v1.35.6+k3s1.sh` copy against pinned SHA-256
   `8598e002e61d658fed7b7542fc6d2c66d8da6eae69e088830105d2ee1ffb6d91`

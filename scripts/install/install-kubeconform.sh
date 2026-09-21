@@ -4,6 +4,7 @@ set -Eeuo pipefail
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 # shellcheck disable=SC1091
 source "$repo_root/versions.env"
+: "${KUBECONFORM_LINUX_AMD64_SHA256:?KUBECONFORM_LINUX_AMD64_SHA256 is missing from versions.env.}"
 
 install_dir=/usr/local/bin
 
@@ -41,16 +42,24 @@ curl \
   --output "$tmp/CHECKSUMS" \
   "${release_url}/CHECKSUMS"
 
-if ! grep -q " ${archive}$" "$tmp/CHECKSUMS"; then
+checksum_line=$(grep " ${archive}$" "$tmp/CHECKSUMS" || true)
+
+if [[ -z "$checksum_line" ]]; then
   echo "[ERROR] Missing checksum entry for ${archive} in upstream CHECKSUMS." >&2
   exit 1
 fi
 
-(
-  cd "$tmp"
-  grep " ${archive}$" CHECKSUMS |
-    sha256sum --check -
-)
+expected_checksum_line="${KUBECONFORM_LINUX_AMD64_SHA256}  ${archive}"
+
+if [[ "$checksum_line" != "$expected_checksum_line" ]]; then
+  echo "[ERROR] Upstream CHECKSUMS entry for ${archive} does not match the pinned official checksum." >&2
+  exit 1
+fi
+
+printf '%s  %s\n' \
+  "$KUBECONFORM_LINUX_AMD64_SHA256" \
+  "$tmp/$archive" |
+  sha256sum --check -
 
 tar -xzf "$tmp/$archive" -C "$tmp" kubeconform
 
