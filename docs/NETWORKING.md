@@ -40,6 +40,16 @@ Add a second host-only adapter only in the intermediate phase when direct host-t
 
 ## Firewall
 
-The Ubuntu baseline permits SSH, the Kubernetes API, and NodePort traffic from the VirtualBox NAT subnet `10.0.2.0/24`. Review the detected interface and source addresses before tightening these rules further.
+The Ubuntu baseline permits SSH, the Kubernetes API, and NodePort
+traffic from the VirtualBox NAT subnet `10.0.2.0/24`. Review the
+detected interface and source addresses before tightening these rules
+further.
+
+Treat the KubeVirt guest SSH and HTTP NodePorts as lab-only entry points.
+The expected control boundary is:
+
+- Windows loopback forwards managed by VirtualBox NAT;
+- Ubuntu UFW rules restricted to `10.0.2.0/24`;
+- no direct exposure of ports `30022` or `30080` to the home LAN or WAN.
 
 MetalLB is intentionally excluded from the MVP because NAT forwarding plus NodePort already proves end-to-end connectivity with less address-management risk.

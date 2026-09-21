@@ -134,7 +134,8 @@ ssh \
 ```
 
 The private SSH key is generated outside the repository and must never
-be committed.
+be committed. The `devops` guest account is intentionally key-only and
+non-sudo.
 
 ## Reproduce the lab
 

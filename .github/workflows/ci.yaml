@@ -94,41 +94,7 @@ jobs:
       - name: Install pinned kubeconform
         run: |
           set -Eeuo pipefail
-
-          version="${KUBECONFORM_VERSION#v}"
-          archive="kubeconform-linux-amd64.tar.gz"
-          release_url="https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION}"
-
-          curl \
-            --fail \
-            --location \
-            --silent \
-            --show-error \
-            --output "$archive" \
-            "${release_url}/${archive}"
-
-          curl \
-            --fail \
-            --location \
-            --silent \
-            --show-error \
-            --output CHECKSUMS \
-            "${release_url}/CHECKSUMS"
-
-          grep " ${archive}$" CHECKSUMS |
-            sha256sum --check -
-
-          tar -xzf "$archive" kubeconform
-
-          sudo install \
-            --owner=root \
-            --group=root \
-            --mode=0755 \
-            kubeconform \
-            /usr/local/bin/kubeconform
-
-          kubeconform -v
-          printf 'Installed kubeconform %s\n' "$version"
+          ./scripts/install/install-kubeconform.sh
 
       - name: Validate repository
         run: |

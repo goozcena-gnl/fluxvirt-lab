@@ -24,6 +24,9 @@ hypervisor:
 kubernetes:
   distribution: k3s
   k3s_version: "v1.35.6+k3s1"
+  k3s_install_script_path: "vendor/k3s/install-v1.35.6+k3s1.sh"
+  k3s_install_script_commit: "87243446a2c2fe958c31ad552fe38ebf96757b06"
+  k3s_install_script_sha256: "8598e002e61d658fed7b7542fc6d2c66d8da6eae69e088830105d2ee1ffb6d91"
   kubernetes_version: "v1.35.6"
   cni: flannel
   storage_class: local-path

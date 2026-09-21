@@ -4,6 +4,41 @@ set -Eeuo pipefail
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 # shellcheck disable=SC1091
 source "$repo_root/versions.env"
+verify_only=false
+
+if [[ ${1:-} == '--verify-only' ]]; then
+  verify_only=true
+fi
+
+verify_k3s_installer() {
+  : "${K3S_INSTALL_SCRIPT_PATH:?K3S_INSTALL_SCRIPT_PATH is missing from versions.env.}"
+  : "${K3S_INSTALL_SCRIPT_COMMIT:?K3S_INSTALL_SCRIPT_COMMIT is missing from versions.env.}"
+  : "${K3S_INSTALL_SCRIPT_SHA256:?K3S_INSTALL_SCRIPT_SHA256 is missing from versions.env.}"
+
+  local installer_path="$repo_root/$K3S_INSTALL_SCRIPT_PATH"
+
+  if [[ ! -f "$installer_path" ]]; then
+    echo "[ERROR] Pinned K3s installer copy is missing: $installer_path" >&2
+    exit 1
+  fi
+
+  if ! printf '%s  %s\n' \
+    "$K3S_INSTALL_SCRIPT_SHA256" \
+    "$installer_path" |
+    sha256sum --check --status; then
+    echo "[ERROR] Pinned K3s installer checksum mismatch: $installer_path" >&2
+    exit 1
+  fi
+}
+
+verify_k3s_installer
+
+if [[ "$verify_only" == true ]]; then
+  printf 'Verified pinned K3s installer %s (commit %s).\n' \
+    "$K3S_VERSION" \
+    "$K3S_INSTALL_SCRIPT_COMMIT"
+  exit 0
+fi
 
 "$repo_root/scripts/preflight/check-ubuntu-kvm.sh"
 
@@ -24,10 +59,16 @@ node-label:
 protect-kernel-defaults: false
 EOF
 
-curl -fsSL https://get.k3s.io -o /tmp/install-k3s.sh
-chmod 0755 /tmp/install-k3s.sh
-sudo env INSTALL_K3S_VERSION="$K3S_VERSION" INSTALL_K3S_EXEC="server" /tmp/install-k3s.sh
-rm -f /tmp/install-k3s.sh
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+install_script="$tmp/install-k3s.sh"
+cp "$repo_root/$K3S_INSTALL_SCRIPT_PATH" "$install_script"
+chmod 0755 "$install_script"
+printf '%s  %s\n' \
+  "$K3S_INSTALL_SCRIPT_SHA256" \
+  "$install_script" |
+  sha256sum --check --status
+sudo env INSTALL_K3S_VERSION="$K3S_VERSION" INSTALL_K3S_EXEC="server" "$install_script"
 
 mkdir -p "$HOME/.kube"
 sudo cp /etc/rancher/k3s/k3s.yaml "$HOME/.kube/config"

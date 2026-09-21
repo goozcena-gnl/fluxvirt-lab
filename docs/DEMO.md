@@ -101,6 +101,8 @@ ssh \
   devops@"${node_ip}"
 ```
 
+The guest `devops` account is intentionally key-only and non-sudo.
+
 ## 7. Show GitOps ownership
 
 Open:

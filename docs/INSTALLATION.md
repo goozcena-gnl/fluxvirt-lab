@@ -102,4 +102,6 @@ KubeVirt VM web:  http://127.0.0.1:30080
 KubeVirt VM SSH:  ssh -p 30022 devops@127.0.0.1
 ```
 
-These endpoints become valid only after the corresponding readiness and connectivity tests pass.
+These endpoints become valid only after the corresponding readiness and
+connectivity tests pass. Keep the guest SSH key outside the repository;
+the `devops` account is intentionally key-only and non-sudo.

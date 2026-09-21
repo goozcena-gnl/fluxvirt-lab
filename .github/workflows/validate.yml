@@ -15,22 +15,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
+      - name: Load pinned project versions
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          while IFS='=' read -r name value; do
+            case "$name" in
+              KUBERNETES_VERSION)
+                printf '%s=%s\n' "$name" "$value" >> "$GITHUB_ENV"
+                ;;
+            esac
+          done < versions.env
+
       - name: Install validation tools
         shell: bash
         run: |
           set -Eeuo pipefail
           python3 -m pip install --user yamllint==1.35.1
           sudo apt-get update
-          sudo apt-get install -y shellcheck
-          KUBECTL_VERSION=v1.35.6
-          curl --proto '=https' --tlsv1.2 -fsSLO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl"
-          curl --proto '=https' --tlsv1.2 -fsSLO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl.sha256"
+          sudo apt-get install -y shellcheck tar
+          curl --proto '=https' --tlsv1.2 -fsSLO "https://dl.k8s.io/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
+          curl --proto '=https' --tlsv1.2 -fsSLO "https://dl.k8s.io/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl.sha256"
           echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
           sudo install -m 0755 kubectl /usr/local/bin/kubectl
-          KUBECONFORM_VERSION=v0.7.0
-          curl -fsSL "https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION}/kubeconform-linux-amd64.tar.gz" -o /tmp/kubeconform.tar.gz
-          tar -xzf /tmp/kubeconform.tar.gz -C /tmp kubeconform
-          sudo install -m 0755 /tmp/kubeconform /usr/local/bin/kubeconform
+          ./scripts/install/install-kubeconform.sh
 
       - name: Fetch pinned KubeVirt and CDI manifests
         run: ./scripts/vendor/vendor-platform-manifests.sh
