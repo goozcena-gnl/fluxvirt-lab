@@ -11,6 +11,11 @@ if [[ ${1:-} == '--verify-only' ]]; then
   shift
 fi
 
+if (($# > 0)); then
+  echo "Usage: $0 [--verify-only]" >&2
+  exit 2
+fi
+
 verify_k3s_installer() {
   : "${K3S_INSTALL_SCRIPT_PATH:?K3S_INSTALL_SCRIPT_PATH is missing from versions.env.}"
   : "${K3S_INSTALL_SCRIPT_COMMIT:?K3S_INSTALL_SCRIPT_COMMIT is missing from versions.env.}"

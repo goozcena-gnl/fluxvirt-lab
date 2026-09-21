@@ -64,8 +64,10 @@ printf '%s  %s\n' \
 tar -xzf "$tmp/$archive" -C "$tmp" kubeconform
 
 if [[ -w "$install_dir" ]]; then
+  mkdir -p "$install_dir"
   install --mode=0755 "$tmp/kubeconform" "$install_dir/kubeconform"
 else
+  sudo mkdir -p "$install_dir"
   sudo install --mode=0755 "$tmp/kubeconform" "$install_dir/kubeconform"
 fi
 
