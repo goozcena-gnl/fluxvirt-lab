@@ -40,10 +40,20 @@ The container workload uses:
 - CPU and memory requests and limits;
 - readiness and liveness probes.
 
+The KubeVirt guest workload uses:
+
+- SSH public-key authentication only;
+- a non-sudo `devops` guest account;
+- lab-only NodePort exposure for HTTP and SSH through the outer Ubuntu
+  firewall boundary.
+
 ### Supply chain
 
 - component versions are pinned;
 - upstream KubeVirt and CDI manifests are vendored;
+- the K3s bootstrap executes a vendored upstream install script pinned to
+  a specific K3s commit and verified by SHA-256 before any root
+  execution;
 - Repository CI checksum-verifies downloaded kubectl, Kubeconform,
   and Gitleaks release artifacts;
 - mutable GitHub Action tags are prohibited for security-sensitive jobs.
@@ -65,6 +75,11 @@ Treat the following as distinct trust boundaries:
 
 `/dev/kvm` intentionally exposes hardware virtualization and must not be
 made broadly writable.
+
+The VM HTTP and SSH NodePorts are intentionally retained for lab
+demonstration. They are acceptable only behind the documented VirtualBox
+NAT and Ubuntu firewall controls; widening that exposure requires a new
+security review.
 
 ## Planned improvements
 

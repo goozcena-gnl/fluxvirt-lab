@@ -24,6 +24,40 @@ backup checksum, but says its 22 detailed artifacts remain outside the
 repository. Current-facing documents therefore describe these as recorded,
 bounded v0.1.0 results rather than independently reproducible raw evidence.
 
+## 2026-09-21 hardening session (static-only)
+
+Executed in this repository sandbox:
+
+- `kubectl` v1.35.6 downloaded from `dl.k8s.io` and verified against the
+  published `.sha256` sidecar before local installation.
+- `./scripts/install/install-kubeconform.sh --install-dir "$HOME/.local/bin"`
+  verified `kubeconform-linux-amd64.tar.gz` for `v0.7.0` against the
+  pinned official SHA-256
+  `c31518ddd122663b3f3aa874cfe8178cb0988de944f29c74a0b9260920d115d3`
+  and confirmed that the upstream `CHECKSUMS` entry still matches before
+  local installation.
+- `./scripts/bootstrap/install-k3s.sh --verify-only` verified the vendored
+  `vendor/k3s/install-v1.35.6+k3s1.sh` copy against pinned SHA-256
+  `8598e002e61d658fed7b7542fc6d2c66d8da6eae69e088830105d2ee1ffb6d91`
+  and upstream K3s tag commit
+  `87243446a2c2fe958c31ad552fe38ebf96757b06`.
+- `shellcheck $(find scripts -type f -name '*.sh' -print)` passed.
+- `bash -n` passed for every `scripts/**/*.sh` file.
+- `yamllint -c .yamllint .` passed.
+- `./scripts/validation/validate-repository.sh` passed static Kustomize and
+  kubeconform checks in this environment.
+- `git diff --check` passed.
+
+NOT RUN in this session:
+
+- `/dev/kvm` runtime proof.
+- Real K3s installation.
+- Flux bootstrap or reconciliation.
+- Live-cluster KubeVirt/CDI deployment checks.
+- VM boot, guest SSH, guest HTTP, or container HTTP runtime reachability.
+- KubeVirt server-side dry-run validation requiring a live
+  `virtualmachines.kubevirt.io` CRD.
+
 Validation date: 2026-07-22
 Target host profile: Windows 11 Home x86_64 with Oracle VirtualBox 7.2.14
 

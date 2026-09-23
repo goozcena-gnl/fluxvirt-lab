@@ -9,12 +9,12 @@ stringData:
     #cloud-config
     hostname: ubuntu-legacy-web
     manage_etc_hosts: true
+    ssh_pwauth: false
     users:
       - default
       - name: devops
-        groups: [adm, sudo]
+        groups: [adm]
         shell: /bin/bash
-        sudo: ALL=(ALL) NOPASSWD:ALL
         lock_passwd: true
         ssh_authorized_keys:
           - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDy5rdJ6diaG7i1ISKG2St1a1EvsdUXnIiNnecfmPqVq fluxvirt-vm-access

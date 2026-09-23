@@ -24,6 +24,9 @@ hypervisor:
 kubernetes:
   distribution: k3s
   k3s_version: "v1.35.6+k3s1"
+  k3s_install_script_path: "vendor/k3s/install-v1.35.6+k3s1.sh"
+  k3s_install_script_commit: "87243446a2c2fe958c31ad552fe38ebf96757b06"
+  k3s_install_script_sha256: "8598e002e61d658fed7b7542fc6d2c66d8da6eae69e088830105d2ee1ffb6d91"
   kubernetes_version: "v1.35.6"
   cni: flannel
   storage_class: local-path
@@ -35,6 +38,7 @@ platform:
 
 validation:
   kubeconform_version: "v0.7.0"
+  kubeconform_linux_amd64_sha256: "c31518ddd122663b3f3aa874cfe8178cb0988de944f29c74a0b9260920d115d3"
   yamllint_version: "1.35.1"
   trivy_action_version: "v0.35.0@57a97c7e7821a5776cebc9bb87c984fa69cba8f1"
   trivy_version: "v0.69.3"
